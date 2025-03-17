@@ -11,7 +11,7 @@ void eliminar_menor_numero(Pila *a, Pila *auxiliar, Pila *basura, int *menor);
 
 void pila_ordenada(Pila *a, Pila *auxiliar, Pila *ordenada, int *menor);
 
-void insertar_pila(Pila a, Pila aux);
+void insertar_pila(Pila *a, Pila *aux);
 
 int main()
 {
@@ -97,10 +97,15 @@ int main()
             system("cls");
             break;
         case 6:;
+            int num6;
             Pila origen6, auxiliar6;
             inicpila(&origen6);
             inicpila(&auxiliar6);
-            insertar_pila(origen6, auxiliar6);
+            printf("Cree la pila ordenada de menor a mayor");
+            crear_pila(&origen6);
+            printf("Ingrese el numero que quiera insertar: ");
+            scanf("%i", &num6);
+            insertar_pila(&origen6, &auxiliar6, &num6);
             system("pause");
             system("cls");
             break;
@@ -177,28 +182,14 @@ void eliminar_menor_numero(Pila *a, Pila *auxiliar, Pila *basura, int *menor)
 
 void pila_ordenada(Pila *a, Pila *auxiliar, Pila *ordenada, int *menor)
 {
-    int counter = 0;
-    mostrar(a);
     while(!pilavacia(a))
     {
         eliminar_menor_numero(a, auxiliar, ordenada, menor);
     }
 }
 
-void insertar_pila(Pila a, Pila aux)
+void insertar_pila(Pila *a, Pila *aux)
 {
-    int num = 0;
-    for(int i = 0; i < 10; i+= 2)
-    {
-        apilar(&a, i);
-    }
-    mostrar(&a);
-    do
-    {
-        num = rand()%10;
-    }
-    while(num % 2 == 0);
-    printf("Numero a insertar: %i", num);
     while(!pilavacia(&a))
     {
         if(num < tope(&a))
