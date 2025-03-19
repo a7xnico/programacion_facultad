@@ -1,17 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "pila.h"
-void crear_pila(Pila *p);
 
-void mover_elementos(Pila *inicial, Pila *objetivo);
+void crear_pila(Pila* p);
 
-void mover_en_orden(Pila *inicial, Pila *objetivo, Pila *auxiliar);
+void mover_elementos(Pila* inicial, Pila* objetivo);
 
-void eliminar_menor_numero(Pila *a, Pila *auxiliar, Pila *basura, int *menor);
+void mover_en_orden(Pila* inicial, Pila* objetivo, Pila* auxiliar);
 
-void pila_ordenada(Pila *a, Pila *auxiliar, Pila *ordenada, int *menor);
+void eliminar_menor_numero(Pila* a, Pila* auxiliar, Pila* basura, int* menor);
 
-void insertar_pila(Pila *a, Pila *aux);
+void pila_ordenada(Pila* a, Pila* auxiliar, Pila* ordenada, int* menor);
+
+void insertar_pila(Pila* a, Pila* aux, Pila* num_a_insertar);
+
+void ordenada_insercion(Pila* a, Pila* aux, Pila* num_a_insertar);
+
+int suma_tope_anterior(Pila* origen, Pila* auxiliar);
+
+void promedio_pila(Pila* inicial, Pila* aux, float *promedio);
+
+int suma_elementos_pila(Pila* inicial);
+
+int numero_elementos();
+
+float division_pila(int suma, int elementos);
+
+int pasar_decimal(Pila *inicial, Pila *aux);
 
 int main()
 {
@@ -27,6 +43,10 @@ int main()
         printf("4 - Funcion que encuentra el menor numero en una pila lo retorna y lo borra de la pila\n");
         printf("5 - Funcion que ordena una pila de menor a mayor\n");
         printf("6 - Funcion que inserta un numero a una pila ordenada\n");
+        printf("7 - Funcion que inserta una pila a otra para crear una nueva ordenada\n");
+        printf("8 - Funcion que suma el tope y su anterior de una pila\n");
+        printf("9 - Calcular el promedio de una pila\n");
+        printf("10 - Transformar numeros de la pila en un decimal\n");
         printf("Ingrese el numero que usted desee realizar: ");
         fflush(stdin);
         scanf("%i", &opcion);
@@ -98,20 +118,75 @@ int main()
             break;
         case 6:;
             int num6;
-            Pila origen6, auxiliar6;
+            Pila origen6, auxiliar6, num_apilar6;
             inicpila(&origen6);
             inicpila(&auxiliar6);
-            printf("Cree la pila ordenada de menor a mayor");
+            inicpila(&num_apilar6);
+            printf("Cree la pila ordenada de menor a mayor\n");
             crear_pila(&origen6);
             printf("Ingrese el numero que quiera insertar: ");
             scanf("%i", &num6);
-            insertar_pila(&origen6, &auxiliar6, &num6);
+            apilar(&num_apilar6, num6);
+            insertar_pila(&origen6, &auxiliar6, &num_apilar6);
+            mostrar(&origen6);
             system("pause");
             system("cls");
             break;
 
         case 7:;
             Pila origen7, aux7, objetivo7;
+            inicpila(&origen7);
+            inicpila(&aux7);
+            inicpila(&objetivo7);
+            crear_pila(&origen7);
+            mostrar(&origen7);
+            ordenada_insercion(&objetivo7, &aux7, &origen7);
+            mostrar(&objetivo7);
+            mostrar(&aux7);
+            system("pause");
+            system("cls");
+            break;
+
+        case 8:;
+            int suma;
+            Pila origen8, aux8;
+            inicpila(&origen8);
+            inicpila(&aux8);
+            crear_pila(&origen8);
+            suma = suma_tope_anterior(&origen8, &aux8);
+            printf("La suma del tope y su anterior es: %i\n", suma);
+            system("pause");
+            system("cls");
+            break;
+        case 9:;
+            Pila origen9, aux9;
+            float promedio9;
+            inicpila(&origen9);
+            inicpila(&aux9);
+            crear_pila(&origen9);
+            promedio_pila(&origen9, &aux9, &promedio9);
+            printf("El promedio de los numeros en la pila es de: %.2f", promedio9);
+            system("pause");
+            system("cls");
+            break;
+
+        case 10:;
+            Pila origen10, aux10;
+            int suma10= 0;
+            inicpila(&origen10);
+            inicpila(&aux10);
+            printf("Ingresar numeros de 1 digito\n");
+            crear_pila(&origen10);
+            mostrar(&origen10);
+            suma10 = pasar_decimal(&origen10, &aux10);
+            printf("La pila en decimal es: %i\n", suma10);
+            system("pause");
+            system("cls");
+            break;
+
+
+
+
 
         }
     }
@@ -188,31 +263,101 @@ void pila_ordenada(Pila *a, Pila *auxiliar, Pila *ordenada, int *menor)
     }
 }
 
-void insertar_pila(Pila *a, Pila *aux)
+void insertar_pila(Pila *a, Pila *aux, Pila *num_a_insertar)
 {
-    while(!pilavacia(&a))
+    while(!pilavacia(a))
     {
-        if(num < tope(&a))
+        if(tope(num_a_insertar) < tope(a))
         {
-            apilar(&aux, desapilar(&a));
+            apilar(aux, desapilar(a));
         }
         else
         {
-            apilar(&a, num);
-            while(!pilavacia(&aux))
+            apilar(a, desapilar(num_a_insertar));
+            while(!pilavacia(aux))
             {
-                apilar(&a, desapilar(&aux));
+                apilar(a, desapilar(aux));
             }
+
+        }
+        if(pilavacia(num_a_insertar))
+        {
             break;
         }
     }
-    mostrar(&a);
+
 }
 
-void ordenada_insercion(Pila a, Pila aux, Pila objetivo)
+void ordenada_insercion(Pila *a, Pila *aux, Pila *num_a_insertar)
 {
-
+    while(!pilavacia(num_a_insertar))
+    {
+        if(pilavacia(a))
+        {
+            apilar(a, desapilar(num_a_insertar));
+        }
+        else
+        {
+            insertar_pila(a, aux, num_a_insertar);
+        }
+    }
 }
 
+int suma_tope_anterior(Pila* origen, Pila* auxiliar)
+{
+    apilar(auxiliar, desapilar(origen));
+    int suma = tope(origen) + tope(auxiliar);
+    apilar(origen, desapilar(auxiliar));
+    return suma;
+}
 
+void promedio_pila(Pila* inicial, Pila* aux, float* promedio)
+{
+    int suma = 0, elementos= 0;
+    while(!pilavacia(inicial))
+    {
+        suma += suma_elementos_pila(inicial);
+        elementos += numero_elementos();
+        apilar(aux, desapilar(inicial));
+    }
+    while(!pilavacia(aux))
+    {
+        apilar(inicial, desapilar(aux));
+    }
+    *promedio = division_pila(suma, elementos);
+}
 
+int suma_elementos_pila(Pila* inicial)
+{
+    int suma = tope(inicial);
+    return suma;
+}
+
+int numero_elementos()
+{
+    int counter= 0;
+    return counter + 1;
+}
+
+float division_pila(int suma, int elementos)
+{
+    float resultado = (float) suma / elementos;
+    return resultado;
+}
+
+int pasar_decimal(Pila *inicial, Pila *aux)
+{
+    int suma;
+    int counter = 0;
+    while(!pilavacia(inicial))
+    {
+        suma += tope(inicial) * pow(10, counter);
+        apilar(aux, desapilar(inicial));
+        counter++;
+    }
+    while(!pilavacia(aux))
+    {
+        apilar(inicial, desapilar(aux));
+    }
+    return suma;
+}
