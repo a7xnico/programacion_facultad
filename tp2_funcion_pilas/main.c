@@ -29,6 +29,8 @@ float division_pila(int suma, int elementos);
 
 int pasar_decimal(Pila *inicial, Pila *aux);
 
+void mostrar_pila(Pila* inicial, Pila* aux);
+
 int main()
 {
     int opcion;
@@ -47,6 +49,7 @@ int main()
         printf("8 - Funcion que suma el tope y su anterior de una pila\n");
         printf("9 - Calcular el promedio de una pila\n");
         printf("10 - Transformar numeros de la pila en un decimal\n");
+        printf("11 - Mostrar los elementos de la pila sin la funcion default\n");
         printf("Ingrese el numero que usted desee realizar: ");
         fflush(stdin);
         scanf("%i", &opcion);
@@ -183,9 +186,15 @@ int main()
             system("pause");
             system("cls");
             break;
-
-
-
+        case 11:;
+            Pila origen11, aux11;
+            inicpila(&origen11);
+            inicpila(&aux11);
+            crear_pila(&origen11);
+            mostrar_pila(&origen11, &aux11);
+            system("pause");
+            system("cls");
+            break;
 
 
         }
@@ -360,4 +369,21 @@ int pasar_decimal(Pila *inicial, Pila *aux)
         apilar(inicial, desapilar(aux));
     }
     return suma;
+}
+
+
+void mostrar_pila(Pila* inicial, Pila* aux)
+{
+    int num;
+    while(!pilavacia(inicial))
+    {
+        apilar(aux, desapilar(inicial));
+    }
+    while(!pilavacia(aux))
+    {
+        num = tope(aux);
+        printf("| %i ", num);
+        apilar(inicial, desapilar(aux));
+    }
+    printf("\n");
 }
