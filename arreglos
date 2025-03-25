@@ -1,1 +1,47 @@
-tp de arreglos facultad 
+#include <stdio.h>
+#include <stdlib.h>
+
+// Descripción del programa
+// Este programa realiza [descripción de la funcionalidad del programa].
+
+// Declaración de funciones
+void ejemploFuncion();
+
+int main() {
+    // Inicialización de variables
+    int opcion;
+
+    // Menú principal
+    printf("Bienvenido al programa!\n");
+    printf("Seleccione una opción:\n");
+    printf("1. Opción 1\n");
+    printf("2. Opción 2\n");
+    printf("3. Salir\n");
+    scanf("%d", &opcion);
+
+    // Lógica del menú
+    switch(opcion) {
+        case 1:
+            // Llamada a la función ejemploFuncion
+            ejemploFuncion();
+            break;
+        case 2:
+            // Otra funcionalidad
+            printf("Funcionalidad de la opción 2\n");
+            break;
+        case 3:
+            // Salir del programa
+            printf("Saliendo del programa...\n");
+            exit(0);
+        default:
+            printf("Opción no válida. Por favor, intente de nuevo.\n");
+    }
+
+    return 0;
+}
+
+// Definición de funciones
+void ejemploFuncion() {
+    printf("Esta es una función de ejemplo.\n");
+    // Implementación de la función
+}
