@@ -25,19 +25,19 @@ void mostrar_arreglo_char(char array[], int validos);
 int insertar_caracter_en_arreglo(char array[], int validos);
 // ejercicio 8 crear variable mayor para mostrarlo por medio de printf
 char mayor_caracter_arreglo(char array[], int validos);
+// ejercicio 9
+void es_capicua(int array[], int validos);
 
 
 int main()
 {
     int dim, val;
-    char mayor;
     printf("Ingresar dimension del arreglo: ");
     scanf("%d", &dim);
-    char arreglo[dim];
-    cargar_arreglo_char(arreglo, dim, &val);
-    mayor = mayor_caracter_arreglo(arreglo, val);
-    mostrar_arreglo_char(arreglo, val);
-    printf("El mayor caracter es: %c", mayor);
+    int arreglo[dim];
+    cargar_arreglo(arreglo, dim, &val);
+    mostrar_arreglo(arreglo, val);
+    es_capicua(arreglo, val);
 }
 
 void cargar_arreglo(int array[], int dimension,int* validos)
@@ -188,6 +188,21 @@ char mayor_caracter_arreglo(char array[], int validos)
     return mayor;
 }
 
-
+void es_capicua(int array[], int validos)
+{
+    int i;
+    for(i = 0; i < validos/2; i++)
+    {
+        if(array[i] != array[validos - 1 - i])
+        {
+            printf("No es capicua");
+            break;
+        }
+    }
+    if(i == validos/2)
+    {
+        printf("Es capicua");
+    }
+}
 
 
