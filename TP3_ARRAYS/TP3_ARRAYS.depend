@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1490112218 source:c:\programacion codeblocks\tp3_arrays\pila.c
+	"pila.h"
+
+1490112218 c:\programacion codeblocks\tp3_arrays\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1742949144 source:c:\programacion codeblocks\tp3_arrays\main.c
+	<stdio.h>
+	<stdlib.h>
+	"pila.h"
+
