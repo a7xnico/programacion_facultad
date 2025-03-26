@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pila.h"
-
+// ejercicio 1
 void cargar_arreglo(int array[], int dimension,int* validos);
-
+// ejercicio 2
 void mostrar_arreglo(int array[], int validos);
-
+// ejercicio 3
 int suma_arreglo(int array[], int validos);
-
+// ejercicio 4
 void arreglo_a_pila(int array[], int validos, Pila* pila);
-
+// ejercicio 5 las 3 de float, inicializar la dimension a 100 sin preguntarle al usuario
 void cargar_arreglo_float(float array[], int dimension, int* validos);
 
 void mostrar_arreglo_float(float array[], int validos);
 
 float suma_arreglo_float(float array[], int validos);
-
+// ejercicio 6 las 3 de char
 void cargar_arreglo_char(char array[], int dimension, int* validos);
 
 void caracter_en_arreglo(char array[], int dimension, int validos);
