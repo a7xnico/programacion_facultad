@@ -21,7 +21,7 @@ void cargar_arreglo_char(char array[], int dimension, int* validos);
 void caracter_en_arreglo(char array[], int validos);
 
 void mostrar_arreglo_char(char array[], int validos);
-// ejercicio 7
+// ejercicio 7 al crear la dimension sumarle 1 a el valor dado por el usuario para agregar el caracter
 int insertar_caracter_en_arreglo(char array[], int validos);
 
 int main()
