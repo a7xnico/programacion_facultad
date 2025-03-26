@@ -18,20 +18,22 @@ float suma_arreglo_float(float array[], int validos);
 // ejercicio 6 las 3 de char
 void cargar_arreglo_char(char array[], int dimension, int* validos);
 
-void caracter_en_arreglo(char array[], int dimension, int validos);
+void caracter_en_arreglo(char array[], int validos);
 
 void mostrar_arreglo_char(char array[], int validos);
-
+// ejercicio 7
+int insertar_caracter_en_arreglo(char array[], int validos);
 
 int main()
 {
     int dim, val;
-    printf("indique dimension del arreglo: ");
+    printf("Ingresar dimension del arreglo: ");
     scanf("%d", &dim);
-    char arreglo[dim];
+    char arreglo[dim + 1];
     cargar_arreglo_char(arreglo, dim, &val);
-    caracter_en_arreglo(arreglo, dim, val);
+    val = insertar_caracter_en_arreglo(arreglo, val);
     mostrar_arreglo_char(arreglo, val);
+
 }
 
 void cargar_arreglo(int array[], int dimension,int* validos)
@@ -117,12 +119,11 @@ void cargar_arreglo_char(char array[], int dimension, int* validos)
     *validos = i;
 }
 
-void caracter_en_arreglo(char array[], int dimension, int validos)
+void caracter_en_arreglo(char array[], int validos)
 {
     char caracter;
     int encontrado = 0;
     printf("Ingrese el elemento que quiere buscar: ");
-    fflush(stdin);
     scanf(" %c", &caracter); // lo mismo que en cargar_arreglo_char
 
     for(int i = 0; i < validos; i++)
@@ -147,7 +148,24 @@ void mostrar_arreglo_char(char array[], int validos)
     }
 }
 
-
+int insertar_caracter_en_arreglo(char array[], int validos)
+{
+    char caracter, buffer;
+    printf("Ingresar el caracter que quiera insertar al arreglo: ");
+    scanf(" %c", &caracter);
+    int i;
+    for(i = 0; i < validos; i++)
+    {
+        if(caracter < array[i])
+        {
+            buffer = array[i];
+            array[i] = caracter;
+            caracter = buffer;
+        }
+    }
+    array[i] = caracter;
+    return validos++;
+}
 
 
 
