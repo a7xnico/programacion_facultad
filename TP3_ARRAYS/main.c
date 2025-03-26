@@ -23,17 +23,21 @@ void caracter_en_arreglo(char array[], int validos);
 void mostrar_arreglo_char(char array[], int validos);
 // ejercicio 7 al crear la dimension sumarle 1 a el valor dado por el usuario para agregar el caracter
 int insertar_caracter_en_arreglo(char array[], int validos);
+// ejercicio 8 crear variable mayor para mostrarlo por medio de printf
+char mayor_caracter_arreglo(char array[], int validos);
+
 
 int main()
 {
     int dim, val;
+    char mayor;
     printf("Ingresar dimension del arreglo: ");
     scanf("%d", &dim);
-    char arreglo[dim + 1];
+    char arreglo[dim];
     cargar_arreglo_char(arreglo, dim, &val);
-    val = insertar_caracter_en_arreglo(arreglo, val);
+    mayor = mayor_caracter_arreglo(arreglo, val);
     mostrar_arreglo_char(arreglo, val);
-
+    printf("El mayor caracter es: %c", mayor);
 }
 
 void cargar_arreglo(int array[], int dimension,int* validos)
@@ -167,7 +171,22 @@ int insertar_caracter_en_arreglo(char array[], int validos)
     return validos++;
 }
 
-
+char mayor_caracter_arreglo(char array[], int validos)
+{
+    char mayor;
+    for(int i = 0; i < validos; i++)
+    {
+        if(i == 0)
+        {
+            mayor = array[i];
+        }
+        if(mayor < array[i])
+        {
+            mayor = array[i];
+        }
+    }
+    return mayor;
+}
 
 
 
