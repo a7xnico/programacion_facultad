@@ -42,7 +42,7 @@ void cargar_arreglo(int array[], int dimension,int* validos)
         printf("Ingrese un numero entero: ");
         scanf("%d", &array[i]);
         i++;
-        printf("Presione 1 para ingresar otro numero: ");
+        printf("Presione 1 si quiere ingresar otro numero o cualquier otro para terminar de cargar el arreglo: ");
         scanf("%d", &seguir);
     }
     *validos = i;
@@ -108,11 +108,10 @@ void cargar_arreglo_char(char array[], int dimension, int* validos)
     int seguir = 1, i = 0;
     while(i < dimension && seguir == 1)
     {
-        fflush(stdin);
         printf("Ingresar caracter al arreglo: ");
-        scanf("%c", &array[i]);
+        scanf(" %c", &array[i]); // el espacio para evitar problemas con el buffer
         i++;
-        printf("Presione 1 para agregar otro caracter: ");
+        printf("Presione 1 para continuar o cualquier otra tecla para salir: ");
         scanf("%d", &seguir);
     }
     *validos = i;
@@ -121,28 +120,25 @@ void cargar_arreglo_char(char array[], int dimension, int* validos)
 void caracter_en_arreglo(char array[], int dimension, int validos)
 {
     char caracter;
+    int encontrado = 0;
     printf("Ingrese el elemento que quiere buscar: ");
     fflush(stdin);
-    scanf("%c", &caracter);
+    scanf(" %c", &caracter); // lo mismo que en cargar_arreglo_char
 
-    for(int i = 0; i < dimension; i++)
+    for(int i = 0; i < validos; i++)
     {
         if(caracter == array[i])
         {
             printf("El caracter %c esta en el arreglo\n", caracter);
+            encontrado = 1;
             break;
         }
-        if(i == dimension - 1)
-        {
-            if(caracter != array[i])
-            {
-                printf("El caracter %c no esta en el arreglo\n", caracter);
-            }
-        }
     }
-
+    if(!encontrado)
+    {
+        printf("El caracter %c no esta en el arreglo\n", caracter);
+    }
 }
-
 void mostrar_arreglo_char(char array[], int validos)
 {
     for(int i = 0; i < validos; i++)
@@ -150,8 +146,6 @@ void mostrar_arreglo_char(char array[], int validos)
         printf("Posicion %d: %c\n", i, array[i]);
     }
 }
-
-
 
 
 
