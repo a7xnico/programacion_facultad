@@ -28,6 +28,9 @@ char mayor_caracter_arreglo(char array[], int validos);
 // ejercicio 9
 void es_capicua(int array[], int validos);
 
+void invertir_arreglo(int array[], int validos);
+
+
 
 int main()
 {
@@ -36,8 +39,11 @@ int main()
     scanf("%d", &dim);
     int arreglo[dim];
     cargar_arreglo(arreglo, dim, &val);
+    printf("Arreglo original: \n");
     mostrar_arreglo(arreglo, val);
-    es_capicua(arreglo, val);
+    invertir_arreglo(arreglo, val);
+    printf("Arreglo invertido: \n");
+    mostrar_arreglo(arreglo, val);
 }
 
 void cargar_arreglo(int array[], int dimension,int* validos)
@@ -191,7 +197,7 @@ char mayor_caracter_arreglo(char array[], int validos)
 void es_capicua(int array[], int validos)
 {
     int i;
-    for(i = 0; i < validos/2; i++)
+    for(i = 0; i < (validos / 2); i++)
     {
         if(array[i] != array[validos - 1 - i])
         {
@@ -199,9 +205,20 @@ void es_capicua(int array[], int validos)
             break;
         }
     }
-    if(i == validos/2)
+    if(i == (validos / 2))
     {
         printf("Es capicua");
+    }
+}
+
+void invertir_arreglo(int array[], int validos)
+{
+    int i, buffer;
+    for(i = 0; i < (validos / 2); i++)
+    {
+        buffer = array[i];
+        array[i] = array[validos - i - 1];
+        array[validos - i - 1] = buffer;
     }
 }
 
