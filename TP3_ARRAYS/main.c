@@ -30,6 +30,11 @@ void es_capicua(int array[], int validos);
 
 void invertir_arreglo(int array[], int validos);
 
+int detectar_menor(int array[], int pos, int validos);
+
+void arreglo_por_seleccion(int array[], int validos);
+
+void ordenada_insercion(int array[], int validos);
 
 
 int main()
@@ -39,11 +44,9 @@ int main()
     scanf("%d", &dim);
     int arreglo[dim];
     cargar_arreglo(arreglo, dim, &val);
-    printf("Arreglo original: \n");
+    ordenada_insercion(arreglo, val);
     mostrar_arreglo(arreglo, val);
-    invertir_arreglo(arreglo, val);
-    printf("Arreglo invertido: \n");
-    mostrar_arreglo(arreglo, val);
+
 }
 
 void cargar_arreglo(int array[], int dimension,int* validos)
@@ -221,5 +224,54 @@ void invertir_arreglo(int array[], int validos)
         array[validos - i - 1] = buffer;
     }
 }
+
+int detectar_menor(int array[],int pos, int validos)
+{
+    int menor = array[pos];
+    int posmenor = pos;
+    for(int i = pos +  1; i < validos; i++)
+    {
+        if(menor > array[i])
+        {
+            menor = array[i];
+            posmenor = i;
+        }
+    }
+    return posmenor;
+}
+
+void arreglo_por_seleccion(int array[], int validos)
+{
+    int posmenor, buffer;
+    for(int i = 0; i < validos - 1; i++)
+    {
+        posmenor = detectar_menor(array, i, validos);
+        buffer = array[posmenor];
+        array[posmenor] = array[i];
+        array[i] = buffer;
+    }
+}
+
+void insertar(int array[], int validos, int dato)
+{
+    int i = validos;
+    while(i>= 0 && dato < array[i])
+    {
+        array[i + 1] = array[i];
+        i--;
+    }
+    array[i + 1] = dato;
+}
+
+void ordenada_insercion(int array[], int validos)
+{
+    for(int i = 0; i < validos - 1; i++)
+    {
+        insertar(array, validos, array[i + 1]);
+    }
+}
+
+
+
 
 
