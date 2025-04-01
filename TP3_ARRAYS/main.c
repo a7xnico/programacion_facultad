@@ -27,25 +27,30 @@ int insertar_caracter_en_arreglo(char array[], int validos);
 char mayor_caracter_arreglo(char array[], int validos);
 // ejercicio 9
 void es_capicua(int array[], int validos);
-
+// ejercicio 10
 void invertir_arreglo(int array[], int validos);
-
+// ejercicio 11
 int detectar_menor(int array[], int pos, int validos);
 
 void arreglo_por_seleccion(int array[], int validos);
 
+void insertar(int array[], int validos, int dato);
+
 void ordenada_insercion(int array[], int validos);
 
+void ordenar_alfabeticamente(char array1[], char array2[], char array3[], int validos1, int validos2);
 
 int main()
 {
-    int dim, val;
-    printf("Ingresar dimension del arreglo: ");
+    int dim, val1, val2;
+    printf("Ingresar dimension de los arreglos: ");
     scanf("%d", &dim);
-    int arreglo[dim];
-    cargar_arreglo(arreglo, dim, &val);
-    ordenada_insercion(arreglo, val);
-    mostrar_arreglo(arreglo, val);
+    char arreglo1[dim], arreglo2[dim], arreglo3[dim*2];
+    printf("Ingresar los arreglos en orden alfabetico y que sean con el mismo valor: \n");
+    cargar_arreglo_char(arreglo1, dim, &val1);
+    cargar_arreglo_char(arreglo2, dim, &val2);
+    ordenar_alfabeticamente(arreglo1, arreglo2, arreglo3, val1, val2);
+    mostrar_arreglo_char(arreglo3, val1 + val2);
 
 }
 
@@ -254,7 +259,7 @@ void arreglo_por_seleccion(int array[], int validos)
 
 void insertar(int array[], int validos, int dato)
 {
-    int i = validos;
+    int i = validos - 1;
     while(i>= 0 && dato < array[i])
     {
         array[i + 1] = array[i];
@@ -265,9 +270,44 @@ void insertar(int array[], int validos, int dato)
 
 void ordenada_insercion(int array[], int validos)
 {
-    for(int i = 0; i < validos - 1; i++)
+    for(int i = 0; i < validos; i++)
     {
-        insertar(array, validos, array[i + 1]);
+        int dato = array[i];
+        insertar(array, i, dato);
+    }
+}
+
+void ordenar_alfabeticamente(char array1[], char array2[], char array3[], int validos1, int validos2)
+{
+    int i = 0, j = 0;
+    while(i < validos1 && j < validos2)
+    {
+        if(array1[i] < array2[j])
+        {
+            array3[i + j] = array1[i];
+            i++;
+        }
+        else
+        {
+            array3[i + j] = array2[j];
+            j++;
+        }
+    }
+    if(i < validos1)
+    {
+        while(i < validos1)
+        {
+            array3[i + j] = array1[i];
+            i++;
+        }
+    }
+    else
+    {
+        while(j < validos2)
+        {
+            array3[i + j] = array2[j];
+            j++;
+        }
     }
 }
 
