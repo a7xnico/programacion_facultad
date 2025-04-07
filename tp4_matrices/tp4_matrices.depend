@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1744043591 source:c:\tp4_matrices\main.c
+	<stdio.h>
+	<stdlib.h>
+
