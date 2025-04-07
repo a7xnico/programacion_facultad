@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 const int fila = 3, col = 4;
 // ejercicio 1
 void cargar_matriz(int matriz[fila][col]);
@@ -50,11 +51,10 @@ void cargar_matriz(int matriz[fila][col])
 
 void mostrar_matriz(int matriz[fila][col])
 {
-    int i, j;
-    for(i = 0; i < fila; i++)
+    for(int i = 0; i < fila; i++)
     {
         printf("|");
-        for(j = 0; j < col; j++)
+        for(int j = 0; j < col; j++)
         {
             printf(" %i|", matriz[i][j]);
         }
@@ -64,6 +64,7 @@ void mostrar_matriz(int matriz[fila][col])
 
 void cargar_aleatorio(int matriz[fila][col])
 {
+    srand(time(NULL));
     for(int i = 0; i < fila; i++)
     {
         for(int j = 0; j < col; j++)
@@ -97,9 +98,9 @@ float promedio_matriz(int matriz[fila][col])
 int encontrar_elemento(int matriz[fila][col], int elemento)
 {
     int encontrado = 0;
-    for(int i = 0; i < fila; i++)
+    for(int i = 0; i < fila && encontrado == 0; i++)
     {
-        for(int j = 0; j < col; j++)
+        for(int j = 0; j < col && encontrado == 0; j++)
         {
             if(elemento == matriz[i][j])
             {
