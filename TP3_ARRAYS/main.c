@@ -37,20 +37,15 @@ void arreglo_por_seleccion(int array[], int validos);
 void insertar(int array[], int validos, int dato);
 
 void ordenada_insercion(int array[], int validos);
-
+// ejercicio 12 crear 3 arreglos los 2 iniciales y el final con la suma de los dos otros arreglos como dimension
 void ordenar_alfabeticamente(char array1[], char array2[], char array3[], int validos1, int validos2);
+
+
 
 int main()
 {
-    int dim, val1, val2;
-    printf("Ingresar dimension de los arreglos: ");
-    scanf("%d", &dim);
-    char arreglo1[dim], arreglo2[dim], arreglo3[dim*2];
-    printf("Ingresar los arreglos en orden alfabetico y que sean con el mismo valor: \n");
-    cargar_arreglo_char(arreglo1, dim, &val1);
-    cargar_arreglo_char(arreglo2, dim, &val2);
-    ordenar_alfabeticamente(arreglo1, arreglo2, arreglo3, val1, val2);
-    mostrar_arreglo_char(arreglo3, val1 + val2);
+    int vect1[] = {1, 5, 6, 7, 8};
+    int vect2[] = {1, 6, 12, 19, 27};
 
 }
 
