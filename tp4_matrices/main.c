@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-const int fila = 3, col = 4;
+#include <string.h>
+const int fila = 3, col = 4, dim_palabra = 30;
 // ejercicio 1
 void cargar_matriz(int matriz[fila][col]);
 // ejercicio 2
@@ -15,23 +16,30 @@ float promedio_matriz(int matriz[fila][col]);
 // ejercicio 6 no necesita crear variable, buscar si es V o F con ! en un if statement
 int encontrar_elemento(int matriz[fila][col], int elemento);
 
+int cargar_arreglo_string(char arreglo[][dim_palabra], int fila);
+
+void mostrar_arreglo_string(char arreglo[][dim_palabra], int val);
+
+int buscar_string(char arreglo[][dim_palabra], int val, char palabra_buscada[dim_palabra]);
 
 
 int main()
 {
-    int matriz[fila][col];
-    int elemento;
-    cargar_aleatorio(matriz);
-    printf("Cargar el elemento que quiera buscar en la matriz: ");
-    scanf("%i", &elemento);
-    mostrar_matriz(matriz);
-    if(!encontrar_elemento(matriz, elemento))
+    int encontrado;
+    char arreglo[fila][dim_palabra];
+    int val = cargar_arreglo_string(arreglo, fila);
+    char palabra_buscada[dim_palabra];
+    printf("Ingrese la palabra que quiera buscar: ");
+    scanf(" %s", &palabra_buscada);
+    encontrado = buscar_string(arreglo, val, palabra_buscada);
+    mostrar_arreglo_string(arreglo, val);
+    if(encontrado == -1)
     {
-        printf("El elemento %i no esta en la matriz", elemento);
+        printf("%s no esta en el arreglo.\n", palabra_buscada);
     }
     else
     {
-        printf("El elemento %i esta en la matriz", elemento);
+        printf("%s esta en el arreglo en la posicion %i", palabra_buscada, encontrado);
     }
 }
 
@@ -110,3 +118,40 @@ int encontrar_elemento(int matriz[fila][col], int elemento)
     }
     return encontrado;
 }
+
+int cargar_arreglo_string(char arreglo[][dim_palabra], int fila)
+{
+    int continuar = 1, i = 0;
+    while(continuar == 1 && i < fila)
+    {
+        printf("Ingrese una palabra: ");
+        scanf(" %s", &arreglo[i]);
+        i++;
+        printf("Para continuar aprete 1 \n");
+        scanf("%i", &continuar);
+    }
+    return i;
+}
+
+void mostrar_arreglo_string(char arreglo[][dim_palabra], int val)
+{
+    for(int i = 0; i < val; i++)
+    {
+        printf("%s\n", arreglo[i]);
+    }
+}
+
+int buscar_string(char arreglo[][dim_palabra], int val, char palabra_buscada[dim_palabra])
+{
+    int encontrado = -1;
+    for(int i = 0; i < val; i++)
+    {
+        if(strcmpi(palabra_buscada, arreglo[i]) == 0)
+        {
+            encontrado = i;
+        }
+    }
+    return encontrado;
+}
+
+
