@@ -10,39 +10,30 @@ void mostrar_matriz(int matriz[fila][col]);
 // ejercicio 3
 void cargar_aleatorio(int matriz[fila][col]);
 // ejercicio 4, crear variable suma en main
-int sumatoria_matriz(int matriz[fila][col]);
+int sumar_matriz(int matriz[fila][col]);
 // ejercicio 5 crear variable promedio en main, no es necesario crear la suma esta hecho en el promedio
 float promedio_matriz(int matriz[fila][col]);
 // ejercicio 6 no necesita crear variable, buscar si es V o F con ! en un if statement
 int encontrar_elemento(int matriz[fila][col], int elemento);
-
+// ejercicio 7
 int cargar_arreglo_string(char arreglo[][dim_palabra], int fila);
-
+// ejercicio 8
 void mostrar_arreglo_string(char arreglo[][dim_palabra], int val);
-
+// ejercicio 9, hacer if statement con -1 o cualquier otro valor para ver la fila en donde esta o no la string dada
 int buscar_string(char arreglo[][dim_palabra], int val, char palabra_buscada[dim_palabra]);
 
+int detectar_menor_string(char array[][dim_palabra], int pos, int val);
+
+void arreglo_por_seleccion(char arreglo[][dim_palabra], int val);
 
 int main()
 {
-    int encontrado;
     char arreglo[fila][dim_palabra];
     int val = cargar_arreglo_string(arreglo, fila);
-    char palabra_buscada[dim_palabra];
-    printf("Ingrese la palabra que quiera buscar: ");
-    scanf(" %s", &palabra_buscada);
-    encontrado = buscar_string(arreglo, val, palabra_buscada);
+    arreglo_por_seleccion(arreglo, val);
     mostrar_arreglo_string(arreglo, val);
-    if(encontrado == -1)
-    {
-        printf("%s no esta en el arreglo.\n", palabra_buscada);
-    }
-    else
-    {
-        printf("%s esta en el arreglo en la posicion %i", palabra_buscada, encontrado);
-    }
-}
 
+}
 void cargar_matriz(int matriz[fila][col])
 {
     int i, j;
@@ -82,7 +73,7 @@ void cargar_aleatorio(int matriz[fila][col])
     }
 }
 
-int sumatoria_matriz(int matriz[fila][col])
+int sumar_matriz(int matriz[fila][col])
 {
     int suma = 0;
     for(int i = 0; i < fila; i++)
@@ -98,7 +89,7 @@ int sumatoria_matriz(int matriz[fila][col])
 float promedio_matriz(int matriz[fila][col])
 {
     int total = fila * col;
-    int suma = sumatoria_matriz(matriz);
+    int suma = sumar_matriz(matriz);
     float promedio = suma / (float)total;
     return promedio;
 }
@@ -125,7 +116,7 @@ int cargar_arreglo_string(char arreglo[][dim_palabra], int fila)
     while(continuar == 1 && i < fila)
     {
         printf("Ingrese una palabra: ");
-        scanf(" %s", &arreglo[i]);
+        scanf("%s", &arreglo[i]);
         i++;
         printf("Para continuar aprete 1 \n");
         scanf("%i", &continuar);
@@ -153,5 +144,30 @@ int buscar_string(char arreglo[][dim_palabra], int val, char palabra_buscada[dim
     }
     return encontrado;
 }
+
+
+
+void arreglo_por_seleccion(char arreglo[][dim_palabra], int val)
+{
+    for(int i = 0; i < val; i++)
+    {
+        int min_pos = i;
+        for(int j = i + 1; j < val; j++)
+        {
+            if(strcmp(arreglo[j], arreglo[min_pos]) < 0)
+            {
+                min_pos = j;
+            }
+        }
+        if(min_pos != i)
+        {
+            char buffer[dim_palabra];
+            strcpy(buffer, arreglo[i]);
+            strcpy(arreglo[i], arreglo[min_pos]);
+            strcpy(arreglo[min_pos], buffer);
+        }
+    }
+}
+
 
 
