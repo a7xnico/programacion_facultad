@@ -145,8 +145,6 @@ int buscar_string(char arreglo[][dim_palabra], int val, char palabra_buscada[dim
     return encontrado;
 }
 
-
-
 void arreglo_por_seleccion(char arreglo[][dim_palabra], int val)
 {
     for(int i = 0; i < val; i++)
