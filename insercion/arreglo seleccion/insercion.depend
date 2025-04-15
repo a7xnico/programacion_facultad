@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1744731856 source:c:\insercion\arreglo seleccion\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
