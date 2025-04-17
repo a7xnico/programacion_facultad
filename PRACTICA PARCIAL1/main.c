@@ -5,6 +5,8 @@
 #include <math.h>
 const int rangoPrecios = 6;
 const int PrecioMaximo = 999999;
+const int dimPalabras = 20;
+const int filaPalabras = 5;
 // Nicolas Araya Comision 7
 // ejercicio 1
 void cargarPilaCompras(int *cantidad, int *monto, Pila *compras);
@@ -21,9 +23,16 @@ void cargarArregloPorPrecio(int arregloCantidad[rangoPrecios], Pila *compras, in
 int MayorMontoCompras(int arregloMonto[rangoPrecios]);
 // ejercicio 5
 float calcularPorcentajeCompras(int arregloCantidad[rangoPrecios], int cantidad);
+// ejercicio 6
+int estaEnArreglo(char arregloPalabras[][dimPalabras], char palabra[dimPalabras], int validos);
+
+int cargarArregloStrings(char arregloPalabras[filaPalabras][dimPalabras]);
+
+void mostrarPalabras(char arregloPalabras[][dimPalabras], int validos);
 
 int main()
 {
+    char arregloNombres[filaPalabras][dimPalabras];
     int cantidad = 0, monto = 0;
     int CantidadPorRango[rangoPrecios];
     int MontosPorRango[rangoPrecios];
@@ -33,18 +42,23 @@ int main()
     inicpila(&compras);
     cargarPilaCompras(&cantidad, &monto, &compras);
     system("cls");
-    mostrar(&compras);
-    printf("Cantidad de elementos comprados: %i\nMonto total de los elementos: %i\n\n", cantidad, monto);
+    mostrar(&compras); // prueba de que este bien cargada la pila
+    printf("Cantidad de elementos comprados: %i\nMonto total de los elementos: %i\n\n", cantidad, monto); // fijarse que se hayan pasado por referencia correctamente los valores
     ordenarPorInsercion(&compras);
-    printf("Pila tras ser ordenada mediante insercion: \n");
+    printf("Pila tras ser ordenada mediante insercion: \n"); // prueba para ver que se ordenara de forma correcta
     mostrar(&compras);
     cargarArregloPorPrecio(CantidadPorRango, &compras, MontosPorRango);
-    printf("------ Informe por rango de precios ------\n\n");
+    printf("------ Informe por rango de precios ------\n\n"); // muestra de todos los rangos de precios, de no tener ninguna compra mostrara que esta vacio
     mostrarArreglo(CantidadPorRango, MontosPorRango);
-    int posMayorMonto = MayorMontoCompras(MontosPorRango);
-    printf("\n\nRango de compras con mayor monto acumulado: %i\nMonto acumulado en el rango: %i de %i\n\n", posMayorMonto + 1, MontosPorRango[posMayorMonto], monto);
+    int posMayorMonto = MayorMontoCompras(MontosPorRango); // busca el mayor monto
+    printf("\n\nRango de compras con mayor monto acumulado: %i\nMonto acumulado en el rango: %i de %i\n\n", posMayorMonto + 1, MontosPorRango[posMayorMonto], monto); // pMM + 1 para mostrar el num de digitos
     float porcentaje = calcularPorcentajeCompras(CantidadPorRango, cantidad);
-    printf("El porcentaje de el rango elegido sobre el total es de: %.2f%%", porcentaje);
+    printf("El porcentaje de el rango elegido sobre el total es de: %.2f%%\n\n", porcentaje);
+    system("pause");
+    system("cls"); // limpia todo para poder cargar los nombres sin que se llene la consola
+    int palValidas = cargarArregloStrings(arregloNombres);
+    printf("------ Lista de nombres en el arreglo ------\n\n"); // muestra la lista entera
+    mostrarPalabras(arregloNombres, palValidas);
     return 0;
 }
 
@@ -181,11 +195,51 @@ float calcularPorcentajeCompras(int arregloCantidad[rangoPrecios], int cantidad)
     return porcentaje;
 }
 
+int estaEnArreglo(char arregloPalabras[][dimPalabras], char palabra[dimPalabras], int validos)
+{
+    int encontrado = 0;
+    for(int i = 0; i < validos; i++)
+    {
+        if(strcasecmp(palabra, arregloPalabras[i]) == 0)
+        {
+            encontrado = 1;
+        }
+    }
+    return encontrado;
+}
 
+int cargarArregloStrings(char arregloPalabras[filaPalabras][dimPalabras])
+{
+    char palabra[dimPalabras];
+    int continuar = 1;
+    int validos = 0;
+    while(continuar == 1 && validos < filaPalabras)
+    {
+        printf("Ingrese el nombre que quiera agregar al arreglo: ");
+        scanf(" %s", palabra);
+        if(estaEnArreglo(arregloPalabras, palabra, validos))
+        {
+            printf("ERROR. Este nombre ya esta en el arreglo, ingrese otro nombre.\n");
+            continue;
+        }
+        else
+        {
+            strcpy(arregloPalabras[validos], palabra);
+            validos++;
+            printf("Para agregar otro nombre presione 1: ");
+            scanf("%i", &continuar);
+        }
+    }
+    return validos;
+}
 
-
-
-
+void mostrarPalabras(char arregloPalabras[][dimPalabras], int validos)
+{
+    for(int i = 0; i < validos; i++)
+    {
+        printf("%s\n", arregloPalabras[i]);
+    }
+}
 
 
 
