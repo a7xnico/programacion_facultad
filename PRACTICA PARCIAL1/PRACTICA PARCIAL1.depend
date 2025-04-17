@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1744851202 source:c:\users\nico\desktop\programacion facultad\practica parcial1\pila.c
+	"pila.h"
+
+1744851206 c:\users\nico\desktop\programacion facultad\practica parcial1\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1744860344 source:c:\users\nico\desktop\programacion facultad\practica parcial1\main.c
+	<stdio.h>
+	<stdlib.h>
+	"pila.h"
+	<string.h>
+	<math.h>
+
