@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1745861908 source:d:\tp5 arr paralelos\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
