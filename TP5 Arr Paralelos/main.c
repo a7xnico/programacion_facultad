@@ -20,6 +20,13 @@ void intercambio(int legajos[], int edad[], char nombres[][longPalabras], int po
 
 int encontrarMenorNombre(char nombres[][longPalabras], int cargados, int pos);
 
+int insertarNombre(char nombres[][longPalabras], char nombreInsertar[longPalabras], int cargados);
+
+void ordenarInsercion(int legajos[], int edad[], char nombres[][longPalabras], int cargados);
+
+void ActualizarLegajoEdad(int legajos[], int edad[], int posOriginal, int posNueva);
+
+
 int main()
 {
     int legajos[dim];
@@ -29,8 +36,11 @@ int main()
     mostrarRegistro(legajos, edad, nombres, AlumnCargados);
     int legajoBuscado = pedirLegajo();
     mostrarNombrePorLegajo(legajos, edad, nombres, AlumnCargados, legajoBuscado);
-    ordenarRegistro(legajos, edad, nombres, AlumnCargados);
+    /*ordenarRegistro(legajos, edad, nombres, AlumnCargados);
     printf("Legajo ordenado alfabeticamente: \n");
+    mostrarRegistro(legajos, edad, nombres, AlumnCargados);*/
+    printf("Legajo ordenado mediante insercion: \n");
+    ordenarInsercion(legajos, edad, nombres, AlumnCargados);
     mostrarRegistro(legajos, edad, nombres, AlumnCargados);
     return 0;
 }
@@ -145,8 +155,42 @@ void intercambio(int legajos[], int edad[], char nombres[][longPalabras], int po
 }
 
 
+int insertarNombre(char nombres[][longPalabras], char nombreInsertar[longPalabras], int cargados)
+{
+    int i = cargados - 1;
+    while(i >= 0 && strcmpi(nombreInsertar, nombres[i]) < 0)
+    {
+        strcpy(nombres[i + 1], nombres[i]);
+        i--;
+    }
+    strcpy(nombres[i + 1], nombreInsertar);
+    return i + 1;
+}
 
+void ordenarInsercion(int legajos[], int edad[], char nombres[][longPalabras], int cargados)
+{
+        int posNueva;
+        char auxPalabra[longPalabras];
+        for(int i = 0; i < cargados; i++)
+        {
+            strcpy(auxPalabra, nombres[i]);
+            posNueva = insertarNombre(nombres, auxPalabra, i);
+            ActualizarLegajoEdad(legajos, edad, i, posNueva);
+        }
+}
 
+void ActualizarLegajoEdad(int legajos[], int edad[], int posOriginal, int posNueva)
+{
+    int bufferLegajo = legajos[posOriginal];
+    int bufferEdad = edad[posOriginal];
+    for(int i = posOriginal; i > posNueva; i--)
+    {
+        legajos[i] = legajos[i - 1];
+        edad[i] = edad[i - 1];
+    }
+    legajos[posNueva] = bufferLegajo;
+    edad[posNueva] = bufferEdad;
+}
 
 
 
