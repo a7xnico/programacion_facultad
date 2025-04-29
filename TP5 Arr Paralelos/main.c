@@ -16,6 +16,8 @@ void mostrarNombrePorLegajo(int legajos[], int edad[], char nombres[][longPalabr
 
 void ordenarRegistro(int legajos[], int edad[], char nombres[][longPalabras], int cargados);
 
+void intercambio(int legajos[], int edad[], char nombres[][longPalabras], int posActual, int posMenor);
+
 int encontrarMenorNombre(char nombres[][longPalabras], int cargados, int pos);
 
 int main()
@@ -96,22 +98,12 @@ void mostrarNombrePorLegajo(int legajos[], int edad[], char nombres[][longPalabr
 void ordenarRegistro(int legajos[], int edad[], char nombres[][longPalabras], int cargados)
 {
     int posMenor;
-    int buffer;
-    char aux[longPalabras];
     for(int i = 0; i < cargados; i++)
     {
         posMenor = encontrarMenorNombre(nombres, cargados, i);
         if(posMenor != i)
         {
-            strcpy(aux, nombres[i]);
-            strcpy(nombres[i], nombres[posMenor]);
-            strcpy(nombres[posMenor], aux);
-            buffer = legajos[i];
-            legajos[i] = legajos[posMenor];
-            legajos[posMenor] = buffer;
-            buffer = edad[i];
-            edad[i] = edad[posMenor];
-            edad[posMenor] = buffer;
+            intercambio(legajos, edad, nombres, i, posMenor);
         }
     }
 }
@@ -137,6 +129,20 @@ int pedirLegajo()
     return legajoBuscado;
 }
 
+void intercambio(int legajos[], int edad[], char nombres[][longPalabras], int posActual, int posMenor)
+{
+    int buffer;
+    char aux[longPalabras];
+    strcpy(aux, nombres[posActual]);
+    strcpy(nombres[posActual], nombres[posMenor]);
+    strcpy(nombres[posMenor], aux);
+    buffer = legajos[posActual];
+    legajos[posActual] = legajos[posMenor];
+    legajos[posMenor] = buffer;
+    buffer = edad[posActual];
+    legajos[posActual] = legajos[posMenor];
+    legajos[posMenor] = buffer;
+}
 
 
 
