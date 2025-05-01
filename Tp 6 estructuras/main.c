@@ -41,6 +41,9 @@ void ordenarInsercion(alumno a[], int validos);
 
 int contarSegunGenero(alumno a[], int validos, char generoDado);
 
+int menuPrincipal();
+
+
 int main()
 {
     char seguir = 's';
@@ -48,36 +51,38 @@ int main()
     int validos;
     char generoBuscado;
     int cantGenero;
+    int matriculaBuscada;
     do
     {
         int opcion = menuPrincipal();
         switch(opcion)
         {
         case 1:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             system("pause");
             system("cls");
             break;
+        }
         case 2:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             mostrarAlumnos(alumnos, validos);
             system("pause");
             system("cls");
             break;
-
+        }
         case 3:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
-            int matriculaBuscada = pedirMatricula();
+            matriculaBuscada = pedirMatricula();
             mostrarPorMatricula(alumnos, validos, matriculaBuscada);
             system("pause");
             system("cls");
             break;
-
+        }
         case 4:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             mostrarAlumnos(alumnos, validos);
             printf("REGISTRO DE ALUMNOS TRAS SER ORDENADOS SEGUN SU MATRICULA: \n\n");
@@ -86,27 +91,32 @@ int main()
             system("pause");
             system("cls");
             break;
+        }
         case 5:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             generoBuscado = pedirGenero();
             mostrarSegunGenero(alumnos, validos, generoBuscado);
             system("pause");
             system("cls");
             break;
+        }
         case 6:
-            ;
+        {
             alumno dato;
             printf("Ingrese los alumnos en orden segun su matricula: \n");
             validos = cargarAlumnos(alumnos, numAlumnos - 1);
             printf("Ingrese otro alumno que quiera insertar: \n");
             dato = cargarAlumno();
-            insertarAlumno(alumnos, validos + 1, dato);
+            insertarAlumno(alumnos, validos, dato);
+            validos++;
+            mostrarAlumnos(alumnos, validos);
             system("pause");
             system("cls");
             break;
+        }
         case 7:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             mostrarAlumnos(alumnos, validos);
             ordenarInsercion(alumnos, validos);
@@ -115,8 +125,9 @@ int main()
             system("pause");
             system("cls");
             break;
+        }
         case 8:
-            ;
+        {
             validos = cargarAlumnos(alumnos, numAlumnos);
             generoBuscado = pedirGenero();
             cantGenero = contarSegunGenero(alumnos, validos, generoBuscado);
@@ -124,9 +135,9 @@ int main()
             system("pause");
             system("cls");
             break;
+        }
         default:
             system("cls");
-            printf("Gracias por utilizar el programa\n\n");
             seguir = 'n';
             break;
         }
@@ -137,7 +148,7 @@ int main()
         }
     }
     while(seguir == 's');
-
+    printf("Gracias por utilizar el programa\n\n");
 
     return 0;
 
@@ -179,23 +190,18 @@ void mostrarAlumnos(alumno a[], int validos)
 {
     for(int i = 0; i < validos; i++)
     {
-        printf("-------ALUMNO N%d-------\n", i + 1);
+        printf("\n===== ALUMNO %d =====\n", i + 1);
         mostrarAlumno(a[i]);
     }
-    printf("-----------------------\n");
+    printf("=====================\n");
 }
 
 int encontrarMatricula(alumno a[], int validos, int matriculaBuscada)
 {
-    int encontrado = -1;
     for(int i = 0; i < validos; i++)
-    {
         if(matriculaBuscada == a[i].matricula)
-        {
-            encontrado = i;
-        }
-    }
-    return encontrado;
+            return i;
+    return -1;
 }
 
 int pedirMatricula()
@@ -210,12 +216,10 @@ void mostrarPorMatricula(alumno a[], int validos, int matriculaBuscada)
 {
     int posMatricula = encontrarMatricula(a, validos, matriculaBuscada);
     if(posMatricula == -1)
-    {
         printf("La matricula no se encuentra en el registro\n");
-    }
     else
     {
-        printf("------ALUMNO BUSCADO------\n");
+        printf("=====ALUMNO BUSCADO=====\n\n");
         mostrarAlumno(a[posMatricula]);
     }
 }
@@ -225,13 +229,11 @@ int buscarMenor(alumno a[], int validos, int posActual)
     int posMenor = posActual;
     int menor = a[posMenor].matricula;
     for(int i = posActual + 1; i < validos; i++)
-    {
         if(menor > a[i].matricula)
         {
             menor = a[i].matricula;
             posMenor = i;
         }
-    }
     return posMenor;
 }
 
@@ -242,9 +244,7 @@ void ordenarSeleccion(alumno a[], int validos)
     {
         posMenor = buscarMenor(a, validos, i);
         if(posMenor != i)
-        {
             intercambio(a, i, posMenor);
-        }
     }
 }
 
@@ -259,33 +259,32 @@ void intercambio(alumno a[], int posActual, int posMenor)
 char pedirGenero()
 {
     char genero;
-    /*do
-    {*/
-    printf("Ingresar el genero que quiera buscar(m/f/o):  ");
-    scanf(" %c", &genero);
-    /*     if(genero != ('m' || 'f' || 'o'))
-             printf("INGRESE UN GENERO VALIDO (m/f/o)\n");
-     }while(genero != ('m' || 'f' || 'o'));*/
+    do
+    {
+        printf("Ingresar el genero que quiera buscar(m/f/o):  ");
+        scanf(" %c", &genero);
+        if(genero != 'm' && genero != 'f' && genero != 'o')
+            printf("INGRESE UN GENERO VALIDO (m/f/o)\n");
+    }
+    while(genero != 'm' && genero != 'f' && genero != 'o');
     return genero;
 }
 
 void mostrarSegunGenero(alumno a[], int validos, char generoDado)
 {
     for(int i = 0; i < validos; i++)
-    {
         if(a[i].genero == generoDado)
         {
-            printf("----------------\n");
+            printf("=====================\n");
             mostrarAlumno(a[i]);
         }
-    }
-    printf("----------------\n");
+    printf("=====================\n");
 }
 
 void insertarAlumno(alumno a[], int validos, alumno dato)
 {
     int i = validos - 1;
-    while(validos >= 0 && dato.matricula < a[i].matricula)
+    while(i >= 0 && dato.matricula < a[i].matricula)
     {
         a[i + 1] = a[i];
         i--;
@@ -296,7 +295,7 @@ void insertarAlumno(alumno a[], int validos, alumno dato)
 void ordenarInsercion(alumno a[], int validos)
 {
     alumno dato;
-    for(int i = 0; i < validos; i++)
+    for(int i = 1; i < validos; i++)
     {
         dato = a[i];
         insertarAlumno(a, i, dato);
@@ -307,19 +306,15 @@ int contarSegunGenero(alumno a[], int validos, char generoDado)
 {
     int counter = 0;
     for(int i = 0; i < validos; i++)
-    {
         if(a[i].genero == generoDado)
-        {
             counter++;
-        }
-    }
     return counter;
 }
 
 int menuPrincipal()
 {
     int opcion;
-    printf("MENU PRINCIPAL TRABAJO PRACTICO 6 \n");
+    printf("======= MENU PRINCIPAL - TP6 =======\n\n");
     printf("INGRESE EL NUMERO DE LA OPCION QUE QUIERA REALIZAR: \n\n");
     printf("1 - CARGAR ALUMNOS HASTA QUE EL USUARIO DECIDA\n");
     printf("2 - MUESTRA DEL ARREGLO DE ALUMNOS, SE PEDIRA CARGAR UN ARREGLO DE ALUMNOS\n");
