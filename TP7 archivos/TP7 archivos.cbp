@@ -31,10 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="archivo.bin" />
+		<Unit filename="alumnos.bin" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="numeros.bin" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
