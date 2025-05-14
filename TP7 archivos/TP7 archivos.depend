@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1747190276 source:c:\users\nico\desktop\programacion facultad\tp7 archivos\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
