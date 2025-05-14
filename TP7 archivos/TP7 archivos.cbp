@@ -31,9 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="alumnos.bin" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Extensions />
+		<Unit filename="numeros.bin" />
+		<Unit filename="pila.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pila.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

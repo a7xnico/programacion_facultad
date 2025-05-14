@@ -1,6 +1,14 @@
 # depslib dependency file v1.0
-1747190276 source:c:\users\nico\desktop\programacion facultad\tp7 archivos\main.c
+1747232543 source:d:\tp7 archivos\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"pila.h"
+
+1490112218 source:d:\tp7 archivos\pila.c
+	"pila.h"
+
+1490112218 d:\tp7 archivos\pila.h
+	<stdio.h>
+	<malloc.h>
 

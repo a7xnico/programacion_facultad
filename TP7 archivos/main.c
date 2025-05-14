@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pila.h"
 #define dimPalabra 30
+
 
 typedef struct
 {
@@ -30,10 +32,46 @@ void mostrarAlumno(stAlumno a);
 
 void mostrarAlumnos(char nombreArchivo[]);
 
+void agregarAlumnoArchivo(char nombreArchivo[]);
+
+void legajosAlumnosMayores(Pila *p, char nombreArchivo[]);
+
+int pedirEdad();
+
+int contarAlumnoPorEdad(int edadLimite, char nombreArchivo[]);
+
+void rangosEdad(int *edadMin, int *edadMax);
+
+int estaEnRango(int edadMin, int edadMax, stAlumno a);
+
+void mostrarAlumnosEnRango(int edadMin, int edadMax, char nombreArchivo[]);
+
+void mostrarNombreAlumno(stAlumno a);
+
+stAlumno encontrarAlumnoMayor(stAlumno mayor, stAlumno actual);
+
+void mostrarMayorAlumno(char nombreArchivo[]);
+
+int pedirAnio();
+
+int cantidadAlumnosAnio(int anioBuscado, char nombreArchivo[]);
+
+int cargarArregloAlumnos(stAlumno alumnos[], int dim);
+
+void copiarArregloArchivo(stAlumno alumnos[], char nombreArchivo[], int validos);
+
+int copiarAlumnosAlArreglo(stAlumno totalAlumnos[], char nombreArchivo[], int anioBuscado);
+
+void mostrarArregloAlumnos(stAlumno alumnos[], int validos);
+
+int cantidadRegistrosAlumnos(char nombreArchivo[]);
+
+int cantidadRegistroEntero(char nombreArchivo[]);
+
 int main()
 {
-    ///char archivoNumeros[dimPalabra] = "numeros.bin";
-    /**agregarEnteros(archivo);
+    /*char archivoNumeros[dimPalabra] = "numeros.bin";
+    agregarEnteros(archivo);
     agregarElemento(archivoNumeros);
     mostrarNumeros(archivoNumeros);
     int cantidadElementos = contarRegistros(archivoNumeros);
@@ -41,7 +79,30 @@ int main()
 
     char archivoAlumnos[] = "alumnos.bin";
     cargarAlumnos(archivoAlumnos);
+    //agregarAlumnoArchivo(archivoAlumnos);
     mostrarAlumnos(archivoAlumnos);
+    //Pila pilita;
+    //inicpila(&pilita);
+    //legajosAlumnosMayores(&pilita, archivoAlumnos);
+    //mostrar(&pilita);
+    //int edadMin = 0, edadMax = 0;
+    //rangosEdad(&edadMin, &edadMax);
+    //printf("EDAD MINIMA: %d\n", edadMin);
+    //printf("EDAD MAXIMA: %d\n", edadMax);
+    //mostrarAlumnosEnRango(edadMin, edadMax, archivoAlumnos);
+    //stAlumno alumnos[10];
+    //int validos = cargarArregloAlumnos(alumnos, 10);
+    //copiarArregloArchivo(alumnos, archivoAlumnos, validos);
+    //mostrarAlumnos(archivoAlumnos);
+    stAlumno totalAlumnosArchivo[30];
+    //mostrarMayorAlumno(archivoAlumnos);
+    int anioBuscado = pedirAnio();
+    //int cantidad = cantidadAlumnosAnio(anioBuscado, archivoAlumnos);
+    //printf("\nHay %d alumnos que cursan ese anio.\n", cantidad);
+    int val = copiarAlumnosAlArreglo(totalAlumnosArchivo, archivoAlumnos, anioBuscado);
+    mostrarArregloAlumnos(totalAlumnosArchivo, val);
+    int cantRegistros = cantidadRegistrosAlumnos(archivoAlumnos);
+    printf("Hay un total de %d registros en el archivo alumnos", cantRegistros);
 
 }
 
@@ -227,8 +288,282 @@ void mostrarAlumnos(char nombreArchivo[])
         printf("\nERROR: No se pudo abrir el archivo\n");
 }
 
+void agregarAlumnoArchivo(char nombreArchivo[])
+{
+    FILE *fp;
+    stAlumno a;
+    fp = fopen(nombreArchivo, "ab");
+    if(fp)
+    {
+        printf("=========================\n");
+        a = cargarAlumno();
+        fwrite(&a, sizeof(stAlumno), 1, fp);
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+}
 
+void legajosAlumnosMayores(Pila *p, char nombreArchivo[])
+{
+    stAlumno a;
+    FILE *fp;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        while(!feof(fp))
+        {
+            fread(&a, sizeof(stAlumno), 1, fp);
+            if(!feof(fp))
+                if(a.edad >= 18)
+                    apilar(p, a.legajo);
+        }
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No se pudo abrir el archivo.\n");
+}
 
+int pedirEdad()
+{
+    int edad;
+    printf("Ingresar a que edad deben de ser los alumnos buscados: ");
+    scanf("%d", &edad);
+    while(getchar() != '\n');
+    return edad;
+}
+
+int contarAlumnoPorEdad(int edadLimite, char nombreArchivo[])
+{
+    FILE *fp;
+    stAlumno a;
+    int alumnosMayores = 0;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        while(!feof(fp))
+        {
+            fread(&a, sizeof(stAlumno), 1, fp);
+            if(!feof(fp))
+                if(a.edad > edadLimite)
+                    alumnosMayores++;
+        }
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.");
+    return alumnosMayores;
+}
+
+void rangosEdad(int *edadMin, int *edadMax)
+{
+    printf("Ingrese la edad minima del rango que quiera buscar: ");
+    scanf("%d", edadMin);
+    while(getchar() != '\n');
+    do
+    {
+        printf("Ingrese la edad maxima del rango que quiera buscar: ");
+        scanf("%d", edadMax);
+    }
+    while(getchar()!= '\n');
+    if(*edadMax < *edadMin)
+        printf("\nINGRESE DENUEVO: La edad maxima no puede ser menor a la edad minima.\n");
+    while(*edadMax < *edadMin);
+}
+
+int estaEnRango(int edadMin, int edadMax, stAlumno a)
+{
+    int flag = 0;
+    if(a.edad <= edadMax && a.edad >= edadMin)
+        flag++;
+    return flag;
+}
+
+void mostrarAlumnosEnRango(int edadMin, int edadMax, char nombreArchivo[])
+{
+    FILE *fp;
+    stAlumno a;
+
+    fp = fopen(nombreArchivo, "rb");
+
+    if(fp)
+    {
+        while(!feof(fp))
+        {
+            fread(&a, sizeof(stAlumno), 1, fp);
+            if(!feof(fp))
+                if(estaEnRango(edadMin, edadMax, a))
+                {
+                    mostrarNombreAlumno(a);
+                }
+        }
+        printf("-----------------------\n");
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+}
+
+void mostrarNombreAlumno(stAlumno a)
+{
+    printf("-----------------------\n");
+    printf("%s\n", a.nombreYapellido);
+}
+
+stAlumno encontrarAlumnoMayor(stAlumno mayor, stAlumno actual)
+{
+    if(actual.edad > mayor.edad)
+        mayor = actual;
+    return mayor;
+}
+
+void mostrarMayorAlumno(char nombreArchivo[])
+{
+    stAlumno mayor, actual;
+    FILE *fp;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        if(!feof(fp))
+            fread(&mayor, sizeof(stAlumno), 1, fp);
+        while(fread(&actual, sizeof(stAlumno), 1, fp) > 0)
+            mayor = encontrarAlumnoMayor(mayor, actual);
+        printf("\nALUMNO DE MAYOR EDAD: \n");
+        mostrarAlumno(mayor);
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+}
+
+int pedirAnio()
+{
+    int anio;
+    printf("INGRESE EL ANIO QUE QUIERA BUSCAR: ");
+    scanf("%d", &anio);
+    while(getchar() != '\n');
+    return anio;
+}
+
+int cantidadAlumnosAnio(int anioBuscado, char nombreArchivo[])
+{
+    int cantidad = 0;
+    FILE *fp;
+    stAlumno a;
+
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        while(fread(&a, sizeof(stAlumno), 1, fp) > 0)
+            if(a.anio == anioBuscado)
+                cantidad++;
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+    return cantidad;
+}
+
+int cargarArregloAlumnos(stAlumno alumnos[], int dim)
+{
+    int i = 0;
+    char seguir = 's';
+    do
+    {
+        printf("Cargue el alumno %d: \n", i);
+        alumnos[i] = cargarAlumno();
+        i++;
+        printf("Quiere seguir cargando alumnos (s/n): ");
+        scanf(" %c", &seguir);
+    }
+    while((seguir == 's' || seguir == 's') && i < dim);
+    return i;
+}
+
+void copiarArregloArchivo(stAlumno alumnos[], char nombreArchivo[], int validos)
+{
+    FILE *fp;
+    fp = fopen(nombreArchivo, "ab");
+    if(fp)
+    {
+        for(int i = 0; i < validos; i++)
+            fwrite(&alumnos[i], sizeof(stAlumno), 1, fp);
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+}
+
+int copiarAlumnosAlArreglo(stAlumno totalAlumnos[], char nombreArchivo[], int anioBuscado)
+{
+    stAlumno a;
+    FILE *fp;
+    int i = 0;
+
+    fp = fopen(nombreArchivo, "rb");
+
+    if(fp)
+    {
+        while(fread(&a, sizeof(stAlumno), 1, fp) > 0)
+        {
+            if(a.anio == anioBuscado)
+            {
+                totalAlumnos[i] = a;
+                i++;
+            }
+        }
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo.\n");
+    return i;
+}
+
+void mostrarArregloAlumnos(stAlumno alumnos[], int validos)
+{
+    for(int i = 0; i < validos; i++)
+    {
+        printf("\n===========ALUMNO N%d==========\n", i+1);
+        mostrarAlumno(alumnos[i]);
+    }
+    printf("\n===============================\n");
+}
+
+int cantidadRegistrosAlumnos(char nombreArchivo[])
+{
+    int registros = 0;
+    long int bytes = 0;
+    FILE *fp;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        fseek(fp, 0, SEEK_END);
+        bytes = ftell(fp);
+        registros = bytes / sizeof(stAlumno);
+        fclose(fp);
+    }
+    else
+        printf("\nError: No pudo abrirse el archivo.\n");
+    return registros;
+}
+
+int cantidadRegistroEntero(char nombreArchivo[])
+{
+    int registros = 0;
+    long int bytes = 0;
+    FILE *fp;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        fseek(fp, 0, SEEK_END);
+        bytes = ftell(fp);
+        registros = bytes / sizeof(int);
+        fclose(fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo. \n");
+    return registros;
+}
 
 
 
