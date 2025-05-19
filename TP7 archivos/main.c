@@ -639,7 +639,7 @@ void verificacionCantAlumnos(char nombreArchivo[])
     }
 }
 
-void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
+void sobreescribirAlumnoEntero(char nombreArchivo[], int numAlumno)
 {
     FILE *fp;
     stAlumno a;
@@ -654,7 +654,37 @@ void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
         printf("\nERROR: No pudo abrirse el archivo");
 }
 
+void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
+{
+    int opcion = 0;
+    do
+    {
+        printf("\nIngrese el numero que quiera intercambiar: \n");
+        printf("1-Legajo del alumno\n");
+        printf("2-Nombre del alumno\n");
+        printf("3-Edad del alumno\n");
+        printf("4-Anio del alumno\n");
+        printf("5-El alumno entero\n");
+        scanf("%d", &opcion);
+    }while(opcion < 1 || opcion > 5);
+    switch(opcion)
+    {
+    case 1:
 
+
+
+
+
+
+
+
+    case 5:
+        {
+            sobreescribirAlumnoEntero(nombreArchivo, numAlumno);
+        }
+    }
+
+}
 
 
 
