@@ -68,6 +68,16 @@ int cantidadRegistrosAlumnos(char nombreArchivo[]);
 
 int cantidadRegistroEntero(char nombreArchivo[]);
 
+void mostrarAlumnoBuscado(char nombreArchivo[], int numeroAlumnoBuscado);
+
+int pedirNumeroAlumno();
+
+void verificacionCantAlumnos(char nombreArchivo[]);
+
+void sobreescribirAlumno(char nombreArchivo[], int numAlumno);
+
+
+
 int main()
 {
     /*char archivoNumeros[dimPalabra] = "numeros.bin";
@@ -104,6 +114,12 @@ int main()
     int cantRegistros = cantidadRegistrosAlumnos(archivoAlumnos);
     printf("Hay un total de %d registros en el archivo alumnos", cantRegistros);
 
+    int alumnoBuscado = pedirNumeroAlumno();
+    verificacionCantAlumnos(archivoAlumnos);
+    mostrarAlumnoBuscado(archivoAlumnos, alumnoBuscado);
+    printf("\nIngrese el numero del alumno que quiera sobreescribir: \n");
+    int alumnoIntercambiado = pedirNumeroAlumno();
+    sobreescribirAlumno(archivoAlumnos, alumnoIntercambiado);
 }
 
 void agregarElemento(char archivo[])
@@ -564,6 +580,94 @@ int cantidadRegistroEntero(char nombreArchivo[])
         printf("\nERROR: No pudo abrirse el archivo. \n");
     return registros;
 }
+
+void mostrarAlumnoBuscado(char nombreArchivo[], int numeroAlumnoBuscado)
+{
+    FILE *fp;
+    stAlumno a;
+    fp = fopen(nombreArchivo, "rb");
+    if(fp)
+    {
+        fseek(fp, sizeof(stAlumno)*numeroAlumnoBuscado, SEEK_SET);
+        fread(&a, sizeof(stAlumno), 1, fp);
+        printf("\nAlumno buscado: \n");
+        mostrarAlumno(a);
+        fclose(fp);
+    }
+    else
+    {
+        printf("\nERRROR: No pudo abrirse el archivo.");
+    }
+
+}
+
+int pedirNumeroAlumno()
+{
+    int numAlumno;
+    do
+    {
+        printf("\nIngrese un numero entre el 0 y el 9: ");
+        scanf("%d", &numAlumno);
+        if(numAlumno < 0 || numAlumno > 9)
+            printf("Ingresar un numero valido.\n");
+    }while(numAlumno < 0 || numAlumno > 9);
+    return numAlumno;
+}
+
+void verificacionCantAlumnos(char nombreArchivo[])
+{
+    int registros = cantidadRegistrosAlumnos(nombreArchivo);
+    if(registros < 10)
+    {
+        FILE *fp;
+        stAlumno a;
+        printf("\nNo hay suficientes alumnos, cargue hasta que alla 10 en el archivo.\n\n");
+        fp = fopen(nombreArchivo, "ab");
+        if(fp)
+        {
+            while(registros < 10)
+            {
+                printf("\n-------Alumno %d---------\n", registros+1);
+                a = cargarAlumno();
+                fwrite(&a, sizeof(stAlumno), 1, fp);
+                registros++;
+            }
+            fclose(fp);
+        }
+        else
+            printf("\nError: no pudo abrirse el archivo.");
+    }
+}
+
+void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
+{
+    FILE *fp;
+    stAlumno a;
+    fp = fopen(nombreArchivo, "ab");
+    if(fp)
+    {
+        fseek(fp, sizeof(stAlumno)* numAlumno, SEEK_SET);
+        a = cargarAlumno();
+        fwrite(&a, sizeof(stAlumno), 1, fp);
+    }
+    else
+        printf("\nERROR: No pudo abrirse el archivo");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
