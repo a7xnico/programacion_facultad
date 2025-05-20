@@ -76,7 +76,9 @@ void verificacionCantAlumnos(char nombreArchivo[]);
 
 void sobreescribirAlumno(char nombreArchivo[], int numAlumno);
 
+void editarAlumno(char nombreArchivo[], int legajoBuscado);
 
+void intercambiarArchivoEntero(char nombreArchivo[]);
 
 int main()
 {
@@ -104,22 +106,24 @@ int main()
     //int validos = cargarArregloAlumnos(alumnos, 10);
     //copiarArregloArchivo(alumnos, archivoAlumnos, validos);
     //mostrarAlumnos(archivoAlumnos);
-    stAlumno totalAlumnosArchivo[30];
+    //stAlumno totalAlumnosArchivo[30];
     //mostrarMayorAlumno(archivoAlumnos);
-    int anioBuscado = pedirAnio();
+    //int anioBuscado = pedirAnio();
     //int cantidad = cantidadAlumnosAnio(anioBuscado, archivoAlumnos);
     //printf("\nHay %d alumnos que cursan ese anio.\n", cantidad);
-    int val = copiarAlumnosAlArreglo(totalAlumnosArchivo, archivoAlumnos, anioBuscado);
-    mostrarArregloAlumnos(totalAlumnosArchivo, val);
-    int cantRegistros = cantidadRegistrosAlumnos(archivoAlumnos);
-    printf("Hay un total de %d registros en el archivo alumnos", cantRegistros);
+    //int val = copiarAlumnosAlArreglo(totalAlumnosArchivo, archivoAlumnos, anioBuscado);
+    //mostrarArregloAlumnos(totalAlumnosArchivo, val);
+    //int cantRegistros = cantidadRegistrosAlumnos(archivoAlumnos);
+    //printf("Hay un total de %d registros en el archivo alumnos", cantRegistros);
 
-    int alumnoBuscado = pedirNumeroAlumno();
-    verificacionCantAlumnos(archivoAlumnos);
-    mostrarAlumnoBuscado(archivoAlumnos, alumnoBuscado);
-    printf("Ingrese el numero del alumno que quiera sobreescribir: \n");
-    int alumnoIntercambiado = pedirNumeroAlumno();
-    sobreescribirAlumno(archivoAlumnos, alumnoIntercambiado);
+    //int alumnoBuscado = pedirNumeroAlumno();
+    //verificacionCantAlumnos(archivoAlumnos);
+    //mostrarAlumnoBuscado(archivoAlumnos, alumnoBuscado);
+    //printf("Ingrese el numero del alumno que quiera sobreescribir: \n");
+    //int alumnoIntercambiado = pedirNumeroAlumno();
+    //sobreescribirAlumno(archivoAlumnos, alumnoIntercambiado);
+    intercambiarArchivoEntero(archivoAlumnos);
+    mostrarAlumnos(archivoAlumnos);
 }
 
 void agregarElemento(char archivo[])
@@ -648,22 +652,21 @@ int buscarPosAlumnoPorLegajo(char nombreArchivo[], int legajo)
     FILE *fp = fopen(nombreArchivo, "rb");
     stAlumno a;
     int pos = 0;
-
+    int posEncontrada = -1;
     if(fp)
     {
-        while(fread(&a, sizeof(stAlumno), 1, fp) > 0)
+        while(fread(&a, sizeof(stAlumno), 1, fp) > 0 && posEncontrada == -1)
         {
             if(a.legajo == legajo)
             {
-                fclose(fp);
-                return pos;
+                posEncontrada = pos;
             }
             pos++;
         }
         fclose(fp);
     }
 
-    return -1;
+    return posEncontrada;
 }
 
 void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
@@ -690,7 +693,6 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
     if(pos == -1)
     {
         printf("\nNo se encontró un alumno con legajo %d.\n", legajoBuscado);
-
     }
     else
     {
@@ -711,9 +713,13 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
             printf("3 - Edad\n");
             printf("4 - Anio de cursada\n");
             printf("5 - Sobrescribir todo el alumno\n");
-            printf("Ingrese su opción: ");
-            scanf("%d", &opcion);
-            while(getchar() != '\n');
+            do
+            {
+                printf("Ingrese su opción: ");
+                scanf("%d", &opcion);
+                while(getchar() != '\n');
+            }
+            while(opcion < 1 && opcion > 5);
 
             switch(opcion)
             {
@@ -738,19 +744,15 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
             case 5:
                 fclose(fp);
                 sobreescribirAlumno(nombreArchivo, pos);
-                return;
-            default:
-                printf("Opción no válida.\n");
-                fclose(fp);
-                return;
+                break;
             }
-
-            // Guarda los cambios
-            fseek(fp, sizeof(stAlumno) * pos, SEEK_SET);
-            fwrite(&a, sizeof(stAlumno), 1, fp);
-            fclose(fp);
-
-            printf("\nAlumno modificado correctamente.\n");
+            if(opcion !=  5)
+            {
+                fseek(fp, sizeof(stAlumno) * pos, SEEK_SET);
+                fwrite(&a, sizeof(stAlumno), 1, fp);
+                fclose(fp);
+            }
+                printf("\nAlumno modificado correctamente.\n");
         }
         else
             printf("\nERROR: No pudo abrirse el archivo.\n");
@@ -758,10 +760,52 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
 
 }
 
+void intercambiarArchivoEntero(char nombreArchivo[])
+{
+    stAlumno a, b;
+    int cantRegistros = cantidadRegistrosAlumnos(nombreArchivo);
+    int pos = 0;
+    FILE *fp = fopen(nombreArchivo, "r+b");
+    if(fp)
+    {
+        while(pos <= cantRegistros/2)
+        {
+            //Leo
+            fseek(fp, sizeof(stAlumno)*(pos), SEEK_SET);
+            fread(&a, sizeof(stAlumno), 1, fp);
+            fseek(fp, (-(pos+1))*(sizeof(stAlumno)), SEEK_END);
+            fread(&b, sizeof(stAlumno), 1, fp);
+            //Escribo
+            fseek(fp, sizeof(stAlumno)*(pos), SEEK_SET);
+            fwrite(&b, sizeof(stAlumno), 1, fp);
+            fseek(fp, (-(pos+1))*(sizeof(stAlumno)), SEEK_END);
+            fwrite(&a, sizeof(stAlumno), 1, fp);
+            pos++;
+        }
+    }
+}
 
-
-
-
+int menuArchivos()
+{
+    int opcionMenu;
+    printf("====MENU DE OPCIONES=======\n\n");
+    printf("1-AGREGAR UN NÚMERO AL FINAL DE UN ARCHIVO.\n");
+    printf("2-MUESTRA POR PANTALLA EL ARCHIVO DE NUMEROS.\n");
+    printf("3-CANTIDAD DE REGISTROS QUE TIENE EL ARCHIVO \"numeros.bin\".\n");
+    printf("4-CARGAR UN ARCHIVO DE ALUMNOS SI ESTE TIENE MENOS DE 5 REGISTROS.\n");
+    printf("5-MUESTRA DE TODOS LOS ALUMNOS CARGADOS EN EL ARCHIVO.\n");
+    printf("6-AGREGAR UN ALUMNO A \"alumnos.bin\" AL FINAL DEL ARCHIVO.\n");
+    printf("7-PASAR A UNA PILA LOS ALUMNOS MAYORES DE EDAD Y SE MUESTRA EN PANTALLA.\n");
+    printf("8-CONTAR CANTIDAD DE ALUMNOS MAYORES A EDAD INGRESADA.\n");
+    printf("9-MOSTRAR EL NOMBRE DE CADA ALUMNO DENTRO DEL RANGO DE EDAD INGRESADO.\n");
+    printf("10-MOSTRAR DATO DEL ALUMNO DE MAYOR EDAD EN EL ARCHIVO.\n");
+    printf("11-MOSTRAR CANTIDAD DE ALUMNOS QUE CURSEN UN ANIO INGRESADO.\n");
+    printf("12-COPIAR UN ARREGLO DE ALUMNOS A UN ARCHIVO O COPIAR EN UN ARREGLO LOS ALUMNOS DE UN ANIO INGRESADO.\n");
+    printf("13-RETORNAR LA CANTIDAD DE REGISTROS EN \"alumnos.bim\" UTILIZANDO FTELL Y FSEEK.\n");
+    printf("14-MOSTRAR UN REGISTRO ENTRE EL 0 Y EL 9 SEGUN CUAL SEA INGRESADO.\n");
+    printf("15-MODIFICAR UN ALUMNO BUSCADO POR SU LEGAJO.\n");
+    printf("16-INVERTIR TODOS LOS REGISTROS DEL ARCHIVO(EJ. alumno1, alumno2 -> alumno2, alumno1)\n");
+}
 
 
 
