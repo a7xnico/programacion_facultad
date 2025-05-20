@@ -373,17 +373,20 @@ int contarAlumnoPorEdad(int edadLimite, char nombreArchivo[])
 
 void rangosEdad(int *edadMin, int *edadMax)
 {
-    printf("Ingrese la edad minima del rango que quiera buscar: ");
-    scanf("%d", edadMin);
-    while(getchar() != '\n');
     do
     {
+        printf("Ingrese la edad minima del rango que quiera buscar: ");
+        scanf("%d", edadMin);
+        while(getchar() != '\n');
+
         printf("Ingrese la edad maxima del rango que quiera buscar: ");
         scanf("%d", edadMax);
+        while(getchar() != '\n');
+
+        if(*edadMax < *edadMin)
+            printf("\nERROR: La edad maxima no puede ser menor a la edad minima. Intente nuevamente.\n");
+
     }
-    while(getchar()!= '\n');
-    if(*edadMax < *edadMin)
-        printf("\nINGRESE DENUEVO: La edad maxima no puede ser menor a la edad minima.\n");
     while(*edadMax < *edadMin);
 }
 
@@ -492,7 +495,7 @@ int cargarArregloAlumnos(stAlumno alumnos[], int dim)
         printf("Quiere seguir cargando alumnos (s/n): ");
         scanf(" %c", &seguir);
     }
-    while((seguir == 's' || seguir == 's') && i < dim);
+    while((seguir == 's' || seguir == 'S') && i < dim);
     return i;
 }
 
@@ -610,7 +613,8 @@ int pedirNumeroAlumno()
         scanf("%d", &numAlumno);
         if(numAlumno < 0 || numAlumno > 9)
             printf("Ingresar un numero valido.\n");
-    }while(numAlumno < 0 || numAlumno > 9);
+    }
+    while(numAlumno < 0 || numAlumno > 9);
     return numAlumno;
 }
 
@@ -639,23 +643,120 @@ void verificacionCantAlumnos(char nombreArchivo[])
     }
 }
 
+int buscarPosAlumnoPorLegajo(char nombreArchivo[], int legajo)
+{
+    FILE *fp = fopen(nombreArchivo, "rb");
+    stAlumno a;
+    int pos = 0;
+
+    if(fp)
+    {
+        while(fread(&a, sizeof(stAlumno), 1, fp) > 0)
+        {
+            if(a.legajo == legajo)
+            {
+                fclose(fp);
+                return pos;
+            }
+            pos++;
+        }
+        fclose(fp);
+    }
+
+    return -1;
+}
+
 void sobreescribirAlumno(char nombreArchivo[], int numAlumno)
 {
     FILE *fp;
     stAlumno a;
-    fp = fopen(nombreArchivo, "ab");
+    fp = fopen(nombreArchivo, "rb+");
     if(fp)
     {
         fseek(fp, sizeof(stAlumno)* numAlumno, SEEK_SET);
         a = cargarAlumno();
         fwrite(&a, sizeof(stAlumno), 1, fp);
+        fclose(fp);
     }
     else
         printf("\nERROR: No pudo abrirse el archivo");
 }
 
 
+void editarAlumno(char nombreArchivo[], int legajoBuscado)
+{
+    int pos = buscarPosAlumnoPorLegajo(nombreArchivo, legajoBuscado);
 
+    if(pos == -1)
+    {
+        printf("\nNo se encontró un alumno con legajo %d.\n", legajoBuscado);
+
+    }
+    else
+    {
+        FILE *fp = fopen(nombreArchivo, "rb+");
+        if(fp)
+        {
+            stAlumno a;
+            fseek(fp, sizeof(stAlumno) * pos, SEEK_SET);
+            fread(&a, sizeof(stAlumno), 1, fp);
+
+            printf("\nDatos actuales del alumno:\n");
+            mostrarAlumno(a);
+
+            int opcion;
+            printf("\n¿Qué desea modificar?\n");
+            printf("1 - Legajo\n");
+            printf("2 - Nombre y Apellido\n");
+            printf("3 - Edad\n");
+            printf("4 - Anio de cursada\n");
+            printf("5 - Sobrescribir todo el alumno\n");
+            printf("Ingrese su opción: ");
+            scanf("%d", &opcion);
+            while(getchar() != '\n');
+
+            switch(opcion)
+            {
+            case 1:
+                printf("Nuevo legajo: ");
+                scanf("%d", &a.legajo);
+                break;
+            case 2:
+                printf("Nuevo nombre: ");
+                fflush(stdin);
+                fgets(a.nombreYapellido, sizeof(a.nombreYapellido), stdin);
+                a.nombreYapellido[strcspn(a.nombreYapellido, "\n")] = 0;
+                break;
+            case 3:
+                printf("Nueva edad: ");
+                scanf("%d", &a.edad);
+                break;
+            case 4:
+                printf("Nuevo año de cursada: ");
+                scanf("%d", &a.anio);
+                break;
+            case 5:
+                fclose(fp);
+                sobreescribirAlumno(nombreArchivo, pos);
+                return;
+            default:
+                printf("Opción no válida.\n");
+                fclose(fp);
+                return;
+            }
+
+            // Guarda los cambios
+            fseek(fp, sizeof(stAlumno) * pos, SEEK_SET);
+            fwrite(&a, sizeof(stAlumno), 1, fp);
+            fclose(fp);
+
+            printf("\nAlumno modificado correctamente.\n");
+        }
+        else
+            printf("\nERROR: No pudo abrirse el archivo.\n");
+    }
+
+}
 
 
 
