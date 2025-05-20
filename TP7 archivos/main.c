@@ -707,7 +707,7 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
             mostrarAlumno(a);
 
             int opcion;
-            printf("\n¿Qué desea modificar?\n");
+            printf("\nIngrese la opcion que quiera modificar: \n");
             printf("1 - Legajo\n");
             printf("2 - Nombre y Apellido\n");
             printf("3 - Edad\n");
