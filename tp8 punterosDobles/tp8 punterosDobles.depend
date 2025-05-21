@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1747848523 source:d:\tp8 punterosdobles\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
