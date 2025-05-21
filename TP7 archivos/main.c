@@ -4,7 +4,6 @@
 #include "pila.h"
 #define dimPalabra 30
 
-
 typedef struct
 {
     int legajo;
@@ -80,50 +79,184 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado);
 
 void intercambiarArchivoEntero(char nombreArchivo[]);
 
+int menuArchivos();
+
 int main()
 {
-    /*char archivoNumeros[dimPalabra] = "numeros.bin";
-    agregarEnteros(archivo);
-    agregarElemento(archivoNumeros);
-    mostrarNumeros(archivoNumeros);
-    int cantidadElementos = contarRegistros(archivoNumeros);
-    printf("El archivo tiene un total de %d registros\n", cantidadElementos);*/
-
+    char archivoNumeros[] = "numeros.bin";
     char archivoAlumnos[] = "alumnos.bin";
-    cargarAlumnos(archivoAlumnos);
-    //agregarAlumnoArchivo(archivoAlumnos);
-    mostrarAlumnos(archivoAlumnos);
-    //Pila pilita;
-    //inicpila(&pilita);
-    //legajosAlumnosMayores(&pilita, archivoAlumnos);
-    //mostrar(&pilita);
-    //int edadMin = 0, edadMax = 0;
-    //rangosEdad(&edadMin, &edadMax);
-    //printf("EDAD MINIMA: %d\n", edadMin);
-    //printf("EDAD MAXIMA: %d\n", edadMax);
-    //mostrarAlumnosEnRango(edadMin, edadMax, archivoAlumnos);
-    //stAlumno alumnos[10];
-    //int validos = cargarArregloAlumnos(alumnos, 10);
-    //copiarArregloArchivo(alumnos, archivoAlumnos, validos);
-    //mostrarAlumnos(archivoAlumnos);
-    //stAlumno totalAlumnosArchivo[30];
-    //mostrarMayorAlumno(archivoAlumnos);
-    //int anioBuscado = pedirAnio();
-    //int cantidad = cantidadAlumnosAnio(anioBuscado, archivoAlumnos);
-    //printf("\nHay %d alumnos que cursan ese anio.\n", cantidad);
-    //int val = copiarAlumnosAlArreglo(totalAlumnosArchivo, archivoAlumnos, anioBuscado);
-    //mostrarArregloAlumnos(totalAlumnosArchivo, val);
-    //int cantRegistros = cantidadRegistrosAlumnos(archivoAlumnos);
-    //printf("Hay un total de %d registros en el archivo alumnos", cantRegistros);
+    stAlumno arregloAlumnos[10];
+    stAlumno alumnosPorAnio[10];
+    Pila alumnosMayores;
+    inicpila(&alumnosMayores);
 
-    //int alumnoBuscado = pedirNumeroAlumno();
-    //verificacionCantAlumnos(archivoAlumnos);
-    //mostrarAlumnoBuscado(archivoAlumnos, alumnoBuscado);
-    //printf("Ingrese el numero del alumno que quiera sobreescribir: \n");
-    //int alumnoIntercambiado = pedirNumeroAlumno();
-    //sobreescribirAlumno(archivoAlumnos, alumnoIntercambiado);
-    intercambiarArchivoEntero(archivoAlumnos);
-    mostrarAlumnos(archivoAlumnos);
+    int opcionMenu = menuArchivos();
+    int seguir = 1;
+
+
+    do
+    {
+        switch(opcionMenu)
+        {
+        case 0:
+        {
+            seguir = 0;
+            break;
+        }
+        case 1:
+        {
+            agregarElemento(archivoNumeros);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 2:
+        {
+            mostrarNumeros(archivoNumeros);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 3:
+        {
+            int registroNumeros = cantidadRegistroEntero(archivoNumeros);
+            printf("%s tiene un total de %d registros.\n", archivoNumeros, registroNumeros);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 4:
+        {
+            cargarAlumnos(archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 5:
+        {
+            mostrarAlumnos(archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 6:
+        {
+            agregarAlumnoArchivo(archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 7:
+        {
+            legajosAlumnosMayores(&alumnosMayores, archivoAlumnos);
+            mostrar(&alumnosMayores);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 8:
+        {
+            int edadMinima = pedirEdad();
+            int cantidadMayor = contarAlumnoPorEdad(edadMinima, archivoAlumnos);
+            printf("Hay un total de %d alumnos mayores de %d anios.\n", cantidadMayor, edadMinima);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 9:
+        {
+            int rangoMin, rangoMax;
+            rangosEdad(&rangoMin, &rangoMax);
+            mostrarAlumnosEnRango(rangoMin, rangoMax, archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 10:
+        {
+            mostrarMayorAlumno(archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 11:
+        {
+            int anioBuscado = pedirAnio();
+            int cantidadAnio = cantidadAlumnosAnio(anioBuscado, archivoAlumnos);
+            printf("Hay un total de %d alumnos en ese anio.\n", cantidadAnio);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 12:
+        {
+            int op;
+            printf("Para crear un arreglo de alumnos y pasarlo al archivo presione 1.\n");
+            printf("Para pasar a un arreglo los alumnos de un anio en especifico presione 2.\n");
+            do
+            {
+                scanf("%d", &op);
+            }
+            while(op != 1 || op != 2);
+            if(op == 1)
+            {
+                int validos = cargarArregloAlumnos(arregloAlumnos, 10);
+                copiarArregloArchivo(arregloAlumnos, archivoAlumnos, validos);
+            }
+            else
+            {
+                int anio = pedirAnio();
+                int validos = copiarAlumnosAlArreglo(alumnosPorAnio, archivoAlumnos, anio);
+                mostrarArregloAlumnos(alumnosPorAnio, validos);
+            }
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 13:
+        {
+            int cantRegistro = cantidadRegistrosAlumnos(archivoAlumnos);
+            printf("El archivo tiene un total de %d registros", cantRegistro);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 14:
+        {
+            verificacionCantAlumnos(archivoAlumnos);
+            int numBuscado = pedirNumeroAlumno();
+            mostrarAlumnoBuscado(archivoAlumnos, numBuscado);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 15:
+        {
+            int numLegajo;
+            printf("Ingrese el numero de legajo del alumno que quiera modificar: ");
+            scanf("%d", numLegajo);
+            editarAlumno(archivoAlumnos, numLegajo);
+            system("pause");
+            system("cls");
+            break;
+        }
+        case 16:
+        {
+            intercambiarArchivoEntero(archivoAlumnos);
+            system("pause");
+            system("cls");
+            break;
+        }
+        }
+        if(seguir == 1)
+        {
+            printf("Desea seguir utilizando el programa?\n1-SI\n2-NO\n");
+            scanf("%d", &seguir);
+        }
+    }
+    while(seguir == 1);
+    printf("Gracias por utilizar el programa!\n");
+    return 0;
 }
 
 void agregarElemento(char archivo[])
@@ -278,10 +411,10 @@ void cargarAlumnos(char nombreArchivo[])
 
 void mostrarAlumno(stAlumno a)
 {
-    printf("     LEGAJO: %d\n", a.legajo);
+    printf("=============LEGAJO: %d\n", a.legajo);
     printf("NOMBRE Y APELLIDO: %s\n", a.nombreYapellido);
-    printf("     EDAD: %d\n", a.edad);
-    printf("     ANIO CURSADO: %d\n", a.anio);
+    printf("=============EDAD: %d\n", a.edad);
+    printf("=====ANIO CURSADO: %d\n", a.anio);
 }
 
 void mostrarAlumnos(char nombreArchivo[])
@@ -715,7 +848,7 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
             printf("5 - Sobrescribir todo el alumno\n");
             do
             {
-                printf("Ingrese su opción: ");
+                printf("Ingrese su opcion: ");
                 scanf("%d", &opcion);
                 while(getchar() != '\n');
             }
@@ -752,7 +885,7 @@ void editarAlumno(char nombreArchivo[], int legajoBuscado)
                 fwrite(&a, sizeof(stAlumno), 1, fp);
                 fclose(fp);
             }
-                printf("\nAlumno modificado correctamente.\n");
+            printf("\nAlumno modificado correctamente.\n");
         }
         else
             printf("\nERROR: No pudo abrirse el archivo.\n");
@@ -789,7 +922,7 @@ int menuArchivos()
 {
     int opcionMenu;
     printf("====MENU DE OPCIONES=======\n\n");
-    printf("1-AGREGAR UN NÚMERO AL FINAL DE UN ARCHIVO.\n");
+    printf("1-AGREGAR UN NUMERO AL FINAL DE UN ARCHIVO.\n");
     printf("2-MUESTRA POR PANTALLA EL ARCHIVO DE NUMEROS.\n");
     printf("3-CANTIDAD DE REGISTROS QUE TIENE EL ARCHIVO \"numeros.bin\".\n");
     printf("4-CARGAR UN ARCHIVO DE ALUMNOS SI ESTE TIENE MENOS DE 5 REGISTROS.\n");
@@ -805,6 +938,17 @@ int menuArchivos()
     printf("14-MOSTRAR UN REGISTRO ENTRE EL 0 Y EL 9 SEGUN CUAL SEA INGRESADO.\n");
     printf("15-MODIFICAR UN ALUMNO BUSCADO POR SU LEGAJO.\n");
     printf("16-INVERTIR TODOS LOS REGISTROS DEL ARCHIVO(EJ. alumno1, alumno2 -> alumno2, alumno1)\n");
+    printf("0-SALIR DEL PROGRAMA.\n");
+    do
+    {
+        printf("INGRESAR LA OPCION QUE QUIERA REALIZAR\n");
+        scanf("%d", &opcionMenu);
+        if(opcionMenu < 0 || opcionMenu > 16)
+            printf("Ingresar una opcion valida.\n");
+    }
+    while(opcionMenu < 0 || opcionMenu > 16);
+    system("cls");
+    return opcionMenu;
 }
 
 
