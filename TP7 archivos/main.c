@@ -89,13 +89,12 @@ int main()
     stAlumno alumnosPorAnio[10];
     Pila alumnosMayores;
     inicpila(&alumnosMayores);
-
-    int opcionMenu = menuArchivos();
     int seguir = 1;
 
 
     do
     {
+        int opcionMenu = menuArchivos();
         switch(opcionMenu)
         {
         case 0:
@@ -252,6 +251,7 @@ int main()
         {
             printf("Desea seguir utilizando el programa?\n1-SI\n2-NO\n");
             scanf("%d", &seguir);
+            system("cls");
         }
     }
     while(seguir == 1);
@@ -762,7 +762,7 @@ void verificacionCantAlumnos(char nombreArchivo[])
     {
         FILE *fp;
         stAlumno a;
-        printf("\nNo hay suficientes alumnos, cargue hasta que alla 10 en el archivo.\n\n");
+        printf("\nNo hay suficientes alumnos, cargue hasta que hayan 10 en el archivo.\n\n");
         fp = fopen(nombreArchivo, "ab");
         if(fp)
         {
