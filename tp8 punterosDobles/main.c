@@ -9,8 +9,6 @@ int cargarArregloDinamico(int a[], int dim, int* arrDinamico);
 void mostrarArreglo(int a[], int val);
 int* crearArregloDinamico(int a[], int dim, int numPares);
 int crearYcargarArreglo(int a[], int dim, int** arrDinamico);
-stAlumno* realocarAlumnos(stAlumno alumnos[], int validos, int nuevosValidos);
-
 
 typedef struct
 {
@@ -27,7 +25,7 @@ void mostrarAlumno(stAlumno a);
 void mostrarArregloAlumnos(stAlumno alumnos[], int validos);
 stAlumno* crearYcargarAlumnos(char nombreArchivo[], int cantidadAlumnos);
 int crearArregloAlumnos(char nombreArchivo[], stAlumno** arrAlumnos, int cantidadAlumnos);
-
+stAlumno* realocarAlumnos(stAlumno alumnos[], int validos, int nuevosValidos);
 
 int main()
 {
@@ -61,14 +59,20 @@ int main()
     arrAlumnos2 = crearYcargarAlumnos(nombreArchivo, cantidadAlumnos);
     mostrarArregloAlumnos(arrAlumnos2, cantidadAlumnos);*/
 
-    /**3.C
+
     stAlumno* arrAlumnos3;
     int valAlumnos = crearArregloAlumnos(nombreArchivo, &arrAlumnos3, cantidadAlumnos);
-    mostrarArregloAlumnos(arrAlumnos3, valAlumnos);*/
+    mostrarArregloAlumnos(arrAlumnos3, valAlumnos);
 
     stAlumno* nuevosAlumnos;
-
-
+    int nuevaCantidad;
+    printf("Ingrese la dimension que quiera del nuevo arreglo de alumnos: ");
+    do
+    {
+        scanf("%d", &nuevaCantidad);
+    }while(nuevaCantidad >= cantidadAlumnos);
+    nuevosAlumnos = realocarAlumnos(arrAlumnos3, valAlumnos, nuevaCantidad);
+    mostrarArregloAlumnos(nuevosAlumnos, nuevaCantidad);
 
 
 }
@@ -256,5 +260,4 @@ stAlumno* realocarAlumnos(stAlumno alumnos[], int validos, int nuevosValidos)
     nuevosAlumnos = realloc(alumnos, nuevosValidos*sizeof(stAlumno));
     return nuevosAlumnos;
 }
-
 
