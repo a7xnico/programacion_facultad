@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1748882651 source:d:\simulacro 2do parcial\main.c
+	<stdio.h>
+	<stdlib.h>
+	<strings.h>
+
