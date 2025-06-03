@@ -30,13 +30,108 @@ galaxia cargarGalaxia();
 
 int cargarGalaxias(galaxia galaxias[]);
 
+void mostrarPlaneta(planeta p);
+
+void mostrarPlanetas(planeta p[], int val);
+
+void mostrarGalaxia(galaxia g);
+
 void mostrarGalaxias(galaxia galaxias[], int val, char tipo[20]);
 
+int cantidadSatelitesTotal(galaxia galaxias[], int valGalaxias, int i);
+
+int cantidadSatelitesGalaxia(galaxia g, int valPlanetas, int i);
+
+void guardarArregloPlanetas(char nombreArchivo[], planeta planetas[], int valPlanetas, float masaMinima);
+
+int ArregloDinamicoPlanetas(char nombreArchivo[], planeta** arrDinamico);
+
+int menuOpciones();
 
 int main()
 {
     galaxia galaxias[cantGalaxias];
-    int val = cargarGalaxias(galaxias);
+    int valGalaxias = 0;
+    int opcion;
+    char tipoGalaxia[20];
+    float masaMinima;
+    planeta* arregloDinamico;
+    int cantPlanetas;
+    char archivo[] = "planetas.bin";
+    do
+    {
+        opcion = menuOpciones();
+
+        switch(opcion)
+        {
+        case 1:
+            {
+                valGalaxias = cargarGalaxias(galaxias);
+                printf("Se cargaron las galaxias correctamente.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 2:
+            {
+                printf("Ingresar el tipo de galaxia a mostrar: ");
+                fgets(tipoGalaxia, 20, stdin);
+                tipoGalaxia[strcspn(tipoGalaxia, "\n")] = 0;
+                mostrarGalaxias(galaxias, valGalaxias, tipoGalaxia);
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 3:
+            {
+                if(valGalaxias > 0)
+                    printf("Cantidad de satelites: %d\n", cantidadSatelitesTotal(galaxias, valGalaxias, 0));
+                else
+                    printf("Cargar las galaxias primero.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 4:
+            {
+                printf("Ingrese la masa minima: ");
+                scanf("%f", &masaMinima);
+                while(getchar() != '\n');
+                for(int i = 0; i < valGalaxias; i++)
+                    guardarArregloPlanetas(archivo, galaxias[i].listaPlanetas, galaxias[i].valPlanetas, masaMinima);
+                printf("Planetas guardados en el archivo.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 5:
+            {
+                cantPlanetas = ArregloDinamicoPlanetas(archivo, &arregloDinamico);
+                if(cantPlanetas)
+                {
+                    printf("Planetas cargados desde el archivo: \n");
+                    mostrarPlanetas(arregloDinamico, cantPlanetas);
+                }
+                else
+                    printf("Cargar planetas al archivo primero.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 6:
+            {
+                printf("Gracias por utilizar el programa!\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        default:
+            printf("Opcion Invalida.\n");
+            system("pause");
+            system("cls");
+        }
+    }while(opcion != 6);
+
     return 0;
 }
 
@@ -199,23 +294,37 @@ int ArregloDinamicoPlanetas(char nombreArchivo[], planeta** arrDinamico)
     fp = fopen(nombreArchivo, "rb");
     int cantPlanetas = 0;
     int i = 0;
+    planeta a;
     if(fp)
     {
         fseek(fp, 0 , SEEK_END);
         cantPlanetas = (ftell(fp) / sizeof(planeta));
-        fclose(fp);
-    }
-    *arrDinamico = malloc(cantPlanetas * sizeof(planeta));
-    fp = fopen(nombreArchivo, "rb");
-    if(fp)
-    {
-        planeta a;
-        while(fread(&a, sizeof(planeta), 1, fp))
+        *arrDinamico = malloc(cantPlanetas * sizeof(planeta));
+        rewind(fp);
+        while(fread(&a, sizeof(planeta), 1, fp) > 0)
         {
             (*arrDinamico)[i] = a;
             i++;
         }
         fclose(fp);
     }
+
     return i;
+}
+
+
+int menuOpciones()
+{
+    int opcion;
+    printf("\n============== MENU DE OPCIONES ==============\n");
+    printf("1. Cargar galaxias y sus planetas\n");
+    printf("2. Mostrar galaxias de un tipo con sus planetas\n");
+    printf("3. Contar satelites totales de todas las galaxias\n");
+    printf("4. Guardar planetas con masa mayor a una minima en archivo\n");
+    printf("5. Cargar planetas desde archivo a arreglo dinamico\n");
+    printf("6. Salir\n");
+    printf("Seleccione una opcion: ");
+    scanf("%d", &opcion);
+    while(getchar() != '\n');
+    return opcion;
 }
