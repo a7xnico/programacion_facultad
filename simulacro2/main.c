@@ -42,8 +42,6 @@ int elegirEquipo(stEquipo equipos[], int cantEquipos);
 
 int encontrarID(stEquipo equipo, char nombre[], int i);
 
-int elegirEquipo(stEquipo equipos[], int cantEquipos);
-
 void guardarEquipo(char nombreArchivo[], stEquipo equipo);
 
 int cargarArrDinamico(char nombreArchivo[], stJugador** arrJugadores);
@@ -146,7 +144,6 @@ int main()
         }
     }
     while(opcion != 7);
-    cargarEquipos(equipos, 5);
     return 0;
 }
 
@@ -221,6 +218,7 @@ int cargarEquipos(stEquipo equipos[], int dim)
         i++;
         printf("Para cargar otro equipo presione 1: ");
         scanf("%d", &seguir);
+        while (getchar() != '\n');
     }
     while(seguir == 1 && i < dim);
     return i;
@@ -234,6 +232,9 @@ int menu()
     printf("2.ORDENAR LOS JUGADORES DE UN EQUIPO SEGUN LOS PUNTOS GANADOS.\n");
     printf("3.SUMAR LOS PUNTOS DE LOS JUGADORES Y ASIGNARLOS A CADA EQUIPO.\n");
     printf("4.INGRESAR NOMBRE DEL EQUIPO Y JUGADOR PARA BUSCAR SU ID.\n");
+    printf("5.GUARDAR TODOS LOS JUGADORES DEL EQUIPO ELEGIDO EN UN ARCHIVO.\n");
+    printf("6.PASAR LOS JUGADORES DEL ARCHIVO A UN ARREGLO.\n");
+    printf("7.SALIR DEL PROGRAMA.\n");
     scanf("%d", &opcion);
     while(getchar() != '\n');
     return opcion;
@@ -305,7 +306,7 @@ int elegirEquipo(stEquipo equipos[], int cantEquipos)
     }
     while(equipoElegido <= 0 || equipoElegido > cantEquipos);
 
-    return equipoElegido;
+    return equipoElegido - 1;
 }
 
 void guardarEquipo(char nombreArchivo[], stEquipo equipo)
@@ -333,11 +334,11 @@ int cargarArrDinamico(char nombreArchivo[], stJugador** arrJugadores)
     fp = fopen(nombreArchivo, "rb");
     int cantJugadores;
     stJugador aux;
-    int i;
+    int i=0;
     if(fp)
     {
         fseek(fp, 0, SEEK_END);
-        cantJugadores = ftell(fp) / cantJugadores;
+        cantJugadores = ftell(fp) / sizeof(stJugador);
         *arrJugadores = malloc(cantJugadores*sizeof(stJugador));
         rewind(fp);
         while(fread(&aux, sizeof(stJugador), 1, fp)>0)
