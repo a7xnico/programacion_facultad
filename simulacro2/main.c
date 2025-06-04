@@ -42,6 +42,12 @@ int elegirEquipo(stEquipo equipos[], int cantEquipos);
 
 int encontrarID(stEquipo equipo, char nombre[], int i);
 
+int elegirEquipo(stEquipo equipos[], int cantEquipos);
+
+void guardarEquipo(char nombreArchivo[], stEquipo equipo);
+
+int cargarArrDinamico(char nombreArchivo[], stJugador** arrJugadores);
+
 int main()
 {
     stEquipo equipos[5];
@@ -52,6 +58,7 @@ int main()
     int id;
     stJugador* arrJugadores;
     int valJugadoresArrego;
+    char archivo[] = "jugadores.bin";
 
     do
     {
@@ -105,8 +112,36 @@ int main()
         }
         case 5:
         {
-
+            printf("Elegir el equipo que quiera guardar en un archivo.\n");
+            equipoElegido = elegirEquipo(equipos, cantEquipos);
+            guardarEquipo(archivo, equipos[equipoElegido]);
+            printf("Jugadores guardados correctamente.\n");
+            system("pause");
+            system("cls");
+            break;
         }
+        case 6:
+            {
+                valJugadoresArrego = cargarArrDinamico(archivo, &arrJugadores);
+                printf("Jugadores guardados al arreglo.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        case 7:
+            {
+                printf("Gracias por utilizar el programa.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+        default:
+            {
+                printf("Opcion invalida.\n");
+                system("pause");
+                system("cls");
+                break;
+            }
 
         }
     }
